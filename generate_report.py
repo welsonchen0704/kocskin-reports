@@ -382,6 +382,7 @@ def build_dashboard_payload(history: Dict[str, Any]) -> Dict[str, Any]:
         d = ad_groups.setdefault(g, {
             "spend": 0.0, "impressions": 0.0, "reach": 0.0,
             "purchases": 0.0, "roas_weighted": 0.0, "ad_count": 0,
+            "has_active": False,
         })
         spend = _num(a.get("花費金額 (TWD)"))
         d["spend"] += spend
@@ -391,12 +392,15 @@ def build_dashboard_payload(history: Dict[str, Any]) -> Dict[str, Any]:
         roas = _num(a.get("購買 ROAS（廣告投資報酬率）"))
         d["roas_weighted"] += roas * spend
         d["ad_count"] += 1
+        if a.get("廣告投遞") == "active":
+            d["has_active"] = True
 
     ad_group_rows = []
     for g, d in ad_groups.items():
         avg_roas = (d["roas_weighted"] / d["spend"]) if d["spend"] else 0
         ad_group_rows.append({
             "group": g,
+            "status": "active" if d["has_active"] else "inactive",
             "spend": round(d["spend"]),
             "impressions": int(d["impressions"]),
             "reach": int(d["reach"]),
