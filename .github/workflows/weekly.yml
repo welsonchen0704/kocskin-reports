@@ -81,8 +81,8 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "chore(report): auto-update $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-            git pull --rebase origin main
-            git pull --rebase origin main
+            git fetch origin main
+            git rebase origin/main -X ours
             git push
           fi
 
