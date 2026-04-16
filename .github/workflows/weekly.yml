@@ -74,13 +74,20 @@ jobs:
           git config user.name "kocskin-report-bot"
           git config user.email "actions@users.noreply.github.com"
           git fetch origin main
+          echo "=== REMOTE HEAD ==="
+          git log --oneline -2 origin/main
+          echo "=== LOCAL HEAD ==="
+          git log --oneline -2 HEAD
           git reset --soft origin/main
           git add state/history.json state/last_run.json logs/ dist/index.html || true
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
             git commit -m "chore(report): auto-update $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-            git push
+            echo "=== AFTER COMMIT ==="
+            git log --oneline -2 HEAD
+            echo "=== PUSHING ==="
+            git push --force-with-lease || git push --force
           fi
 
       - name: Upload Pages artifact
