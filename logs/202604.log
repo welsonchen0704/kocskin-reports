@@ -1,0 +1,27 @@
+2026-04-16 06:55:05 | INFO | ============================================================
+2026-04-16 06:55:05 | INFO | Run started at 2026-04-16T06:55:05+00:00
+2026-04-16 06:55:05 | INFO | Drive folder id: 1oQpEvowEa2XJ7StfG2Je8T7yNuwaV98F
+2026-04-16 06:55:05 | INFO | Folder has 5 files
+2026-04-16 06:55:05 | INFO | Matched files:
+2026-04-16 06:55:05 | INFO |   sales_xlsx: 商店銷售統計表_20260416102258.xlsx (mtime=2026-04-16T02:22:58.173Z)
+2026-04-16 06:55:05 | INFO |   product_csv: 商品報表_utf8_bom.csv (mtime=2026-04-16T02:24:40.932Z)
+2026-04-16 06:55:05 | INFO | Downloading 商店銷售統計表_20260416102258.xlsx → /home/runner/work/kocskin-reports/kocskin-reports/downloads/商店銷售統計表_20260416102258.xlsx
+2026-04-16 06:55:08 | INFO | Downloading 商品報表_utf8_bom.csv → /home/runner/work/kocskin-reports/kocskin-reports/downloads/商品報表_utf8_bom.csv
+2026-04-16 06:55:09 | INFO | Parsed sales xlsx: 15 daily rows
+2026-04-16 06:55:09 | INFO | Sales period: 2026-04-01 ~ 2026-04-15 (15 days)
+2026-04-16 06:55:09 | INFO | Parsed product csv: 46 rows
+2026-04-16 06:55:10 | INFO | FB token: never expires (System User) ✓
+2026-04-16 06:55:18 | INFO | FB: fetched 1651 ads in account
+2026-04-16 06:55:20 | INFO | FB: fetched 66 insight rows for 2026-04-01 ~ 2026-04-15
+2026-04-16 06:55:20 | INFO | FB: normalized 1652 records (66 with spend, 1586 without)
+2026-04-16 06:55:20 | INFO | FB: 1652 ad records fetched
+2026-04-16 06:55:20 | ERROR | GA: daily series failed: 403 User does not have sufficient permissions for this property. To learn more about Property ID, see https://developers.google.com/analytics/devguides/reporting/data/v1/property-id.
+2026-04-16 06:55:20 | ERROR | GA: traffic sources failed: 403 User does not have sufficient permissions for this property. To learn more about Property ID, see https://developers.google.com/analytics/devguides/reporting/data/v1/property-id.
+2026-04-16 06:55:20 | ERROR | GA: devices failed: 403 User does not have sufficient permissions for this property. To learn more about Property ID, see https://developers.google.com/analytics/devguides/reporting/data/v1/property-id.
+2026-04-16 06:55:20 | ERROR | GA: landing pages failed: 403 User does not have sufficient permissions for this property. To learn more about Property ID, see https://developers.google.com/analytics/devguides/reporting/data/v1/property-id.
+2026-04-16 06:55:20 | ERROR | GA: totals failed: 403 User does not have sufficient permissions for this property. To learn more about Property ID, see https://developers.google.com/analytics/devguides/reporting/data/v1/property-id.
+2026-04-16 06:55:20 | INFO | GA: 0 daily rows, 0 sources, 0 devices, 0 landing pages | totals sessions=0 users=0 conversions=0
+2026-04-16 06:55:20 | INFO | Running staticrypt encryption…
+2026-04-16 06:55:22 | INFO | Encrypted HTML written to /home/runner/work/kocskin-reports/kocskin-reports/dist/index.html
+2026-04-16 06:55:22 | INFO | Run complete. orders=1476 ad_spend=178614 blended_roas=10.08 ga_sessions=0
+2026-04-16 06:55:22 | INFO | Exit code: 0
