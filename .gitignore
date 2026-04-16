@@ -1,0 +1,9 @@
+source/
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+.idea/
+node_modules/
+npm-debug.log
