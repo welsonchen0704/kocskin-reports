@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>KOCSKIN｜2026年4月上半月 銷售 × 廣告檢視</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,500&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#f7f2e6;
+    --bg-2:#ffffff;
+    --bg-3:#fbf6ea;
+    --ink:#1a1a17;
+    --ink-soft:#4a443a;
+    --ink-mute:#8a8475;
+    --line:rgba(26,26,23,.09);
+    --line-strong:rgba(26,26,23,.2);
+    --accent:#8c6b22;
+    --accent-soft:#b89447;
+    --warn:#b8392d;
+    --pos:#3e7a51;
+    --alt:#3e6d94;
+    --serif:'Fraunces',"Noto Serif TC",Georgia,serif;
+    --sans:'Noto Sans TC',system-ui,-apple-system,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-weight:300;
+    line-height:1.55;
+    letter-spacing:.01em;
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(circle at 12% 10%, rgba(140,107,34,.06), transparent 42%),
+      radial-gradient(circle at 88% 65%, rgba(62,109,148,.05), transparent 50%);
+  }
+  .page{max-width:1280px;margin:0 auto;padding:56px 40px 80px}
+  @media (max-width:720px){.page{padding:32px 20px 60px}}
+  .masthead{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--line-strong);padding-bottom:22px;margin-bottom:40px;flex-wrap:wrap;gap:18px}
+  .brand{font-family:var(--serif);font-weight:500;font-size:13px;letter-spacing:.3em;color:var(--accent);text-transform:uppercase}
+  h1{font-family:var(--serif);font-weight:300;font-size:clamp(32px,4.8vw,58px);line-height:1.02;margin:12px 0 6px;letter-spacing:-.01em;color:var(--ink)}
+  h1 em{font-style:italic;font-weight:300;color:var(--accent)}
+  .dek{color:var(--ink-soft);font-size:15px;max-width:620px}
+  .meta{font-family:var(--mono);font-size:11px;color:var(--ink-mute);text-align:right;line-height:1.7;letter-spacing:.05em}
+  .meta b{color:var(--ink-soft);font-weight:400}
+  .sec{margin:56px 0 20px}
+  .sec-num{font-family:var(--mono);color:var(--accent);font-size:11px;letter-spacing:.2em;display:block;margin-bottom:6px}
+  .sec-title{font-family:var(--serif);font-weight:500;font-size:28px;margin:0;letter-spacing:-.01em;color:var(--ink)}
+  .sec-title em{font-style:italic;color:var(--ink-soft);font-weight:300}
+  .sec-note{color:var(--ink-mute);font-size:13px;margin-top:6px;max-width:820px}
+
+  /* band groups */
+  .band-label{font-family:var(--mono);font-size:10px;color:var(--ink-mute);letter-spacing:.2em;text-transform:uppercase;padding:14px 0 6px;display:block;border-top:1px solid var(--line);margin-top:2px}
+  .band-label:first-child{border-top:none;padding-top:0;margin-top:0}
+
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line-strong);border:1px solid var(--line-strong);margin-top:16px}
+  @media (max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+  .kpi{background:var(--bg-2);padding:20px 18px;position:relative;transition:background .2s}
+  .kpi:hover{background:var(--bg-3)}
+  .kpi-label{font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-mute);font-family:var(--mono)}
+  .kpi-value{font-family:var(--serif);font-weight:400;font-size:28px;line-height:1;margin-top:12px;letter-spacing:-.02em;color:var(--ink)}
+  .kpi-unit{font-size:12px;color:var(--ink-soft);margin-left:4px;font-family:var(--sans);font-weight:300}
+  .kpi-sub{font-size:11.5px;color:var(--ink-mute);margin-top:8px;font-family:var(--mono)}
+  .kpi.warn .kpi-value{color:var(--warn)}
+  .kpi.pos .kpi-value{color:var(--pos)}
+  .kpi.highlight .kpi-value{color:var(--accent)}
+  .kpi.ad .kpi-value{color:var(--alt)}
+
+  .section-divider{border-top:2px solid var(--ink);padding-top:10px;margin-top:56px;font-family:var(--serif);font-style:italic;color:var(--ink-mute);font-size:14px;letter-spacing:.05em}
+
+  .chart-wrap{background:var(--bg-2);border:1px solid var(--line-strong);padding:24px;margin-top:18px;position:relative}
+  .chart-title{font-family:var(--serif);font-size:18px;margin:0 0 6px;font-weight:500;color:var(--ink)}
+  .chart-sub{color:var(--ink-mute);font-size:12px;margin-bottom:18px;font-family:var(--mono);letter-spacing:.05em}
+  .chart-canvas{position:relative;height:340px}
+  .chart-canvas.tall{height:420px}
+  .chart-canvas.short{height:260px}
+
+  .warn-panel{border:1px solid rgba(184,57,45,.35);background:linear-gradient(180deg,rgba(184,57,45,.05),var(--bg-2));padding:26px 28px 20px;margin-top:18px}
+  .warn-panel h3{font-family:var(--serif);font-size:20px;font-weight:500;margin:0 0 4px;color:var(--warn)}
+  .warn-panel .warn-list{display:grid;grid-template-columns:repeat(2,1fr);gap:20px 40px;margin-top:20px}
+  @media (max-width:900px){.warn-panel .warn-list{grid-template-columns:1fr}}
+  .warn-item{padding-top:16px;border-top:1px solid rgba(184,57,45,.2)}
+  .warn-item-title{font-weight:500;font-size:15px;color:var(--ink);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+  .warn-item-title::before{content:"";width:6px;height:6px;background:var(--warn);border-radius:50%;display:inline-block}
+  .warn-item p{margin:4px 0;font-size:13.5px;color:var(--ink-soft);line-height:1.65}
+  .warn-item .n{font-family:var(--mono);color:var(--warn);font-size:12px;font-weight:600}
+
+  .two-col{display:grid;grid-template-columns:1.5fr 1fr;gap:18px;margin-top:18px}
+  .two-col.even{grid-template-columns:1fr 1fr}
+  @media (max-width:900px){.two-col,.two-col.even{grid-template-columns:1fr}}
+
+  .tbl{width:100%;border-collapse:collapse;font-size:13px}
+  .tbl th{text-align:left;font-weight:500;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);padding:10px 8px;border-bottom:1px solid var(--line-strong);font-family:var(--mono)}
+  .tbl td{padding:11px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+  .tbl td.num{font-family:var(--mono);text-align:right;font-size:12px;color:var(--ink)}
+  .tbl tr:hover td{background:var(--bg-3)}
+  .rank{font-family:var(--serif);font-style:italic;color:var(--accent);font-size:16px;width:28px}
+  .tag{display:inline-block;padding:2px 8px;font-family:var(--mono);font-size:10px;border-radius:2px;letter-spacing:.05em}
+  .tag.good{background:rgba(62,122,81,.12);color:var(--pos)}
+  .tag.bad{background:rgba(184,57,45,.12);color:var(--warn)}
+  .tag.mid{background:rgba(216,148,52,.15);color:#a06d18}
+
+  .insight{background:var(--bg-2);border-left:3px solid var(--accent);padding:22px 26px;margin-top:18px;border-top:1px solid var(--line-strong);border-right:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong)}
+  .insight h4{font-family:var(--serif);font-weight:500;font-size:17px;margin:0 0 10px;color:var(--accent)}
+  .insight ul{margin:0;padding-left:18px}
+  .insight li{color:var(--ink-soft);font-size:14px;margin:10px 0;line-height:1.65}
+  .insight li b{color:var(--ink);font-weight:500}
+
+  .callout{background:var(--bg-3);border:1px solid var(--line-strong);padding:18px 22px;margin-top:18px;font-size:13.5px;color:var(--ink-soft);display:flex;gap:14px;align-items:flex-start}
+  .callout::before{content:"!";display:inline-block;width:20px;height:20px;background:var(--alt);color:white;border-radius:50%;font-family:var(--serif);font-style:italic;font-weight:500;text-align:center;line-height:20px;flex-shrink:0;font-size:13px}
+  .callout b{color:var(--ink)}
+
+  .footer{margin-top:72px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-mute);font-size:12px;font-family:var(--mono);letter-spacing:.05em}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <div>
+      <div class="brand">KOCSKIN · Sales × Ads Review</div>
+      <h1>4月上半月<br>銷售 × 廣告 <em>交叉檢視</em></h1>
+      <div class="dek">銷售資料 4/1–4/15（15 日），廣告資料 4/1–4/16（16 日），期間相差 1 日。以 ECOM 實際訂單金額與 Meta 廣告帳號花費/歸因購買雙源比對，分析廣告效率與商品銷售是否對齊。</div>
+    </div>
+    <div class="meta">
+      <div><b>銷售期間</b> 2026.04.01 – 04.15</div>
+      <div><b>廣告期間</b> 2026.04.01 – 04.16</div>
+      <div><b>資料來源</b> 店後台 + Meta Ads</div>
+      <div><b>產出</b> 2026.04.16</div>
+    </div>
+  </header>
+
+  <section class="sec">
+    <span class="sec-num">01 / OVERVIEW</span>
+    <h2 class="sec-title">核心 <em>指標</em></h2>
+    <div class="sec-note">上排為 ECOM 銷售面；下排為 Meta 廣告面。Blended ROAS 是「ECOM 全站營收 / 廣告花費」；Meta ROAS 只計 Meta 歸因的購買金額。</div>
+  </section>
+
+  <span class="band-label">SALES · 店後台銷售</span>
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-label">訂單金額 · 折扣後</div>
+      <div class="kpi-value">1,800,855<span class="kpi-unit">NT$</span></div>
+      <div class="kpi-sub">1,476 筆訂單</div>
+    </div>
+    <div class="kpi highlight">
+      <div class="kpi-label">平均客單價 (AOV)</div>
+      <div class="kpi-value">1,220<span class="kpi-unit">NT$</span></div>
+      <div class="kpi-sub">Q1 平均約 1,300（−6%）</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">售出商品件數</div>
+      <div class="kpi-value">1,752<span class="kpi-unit">件</span></div>
+      <div class="kpi-sub">平均每單 1.19 件</div>
+    </div>
+    <div class="kpi warn">
+      <div class="kpi-label">取消金額</div>
+      <div class="kpi-value">338,008<span class="kpi-unit">NT$</span></div>
+      <div class="kpi-sub">佔訂單 18.8%　警訊</div>
+    </div>
+  </div>
+
+  <span class="band-label">ADS · Meta 廣告帳號</span>
+  <div class="kpi-grid">
+    <div class="kpi ad">
+      <div class="kpi-label">廣告花費</div>
+      <div class="kpi-value">157,621<span class="kpi-unit">NT$</span></div>
+      <div class="kpi-sub">16 天平均 9,851 / 日</div>
+    </div>
+    <div class="kpi pos">
+      <div class="kpi-label">Blended ROAS</div>
+      <div class="kpi-value">11.43<span class="kpi-unit">×</span></div>
+      <div class="kpi-sub">ECOM營收 / 廣告花費</div>
+    </div>
+    <div class="kpi ad">
+      <div class="kpi-label">Meta 歸因 ROAS</div>
+      <div class="kpi-value">4.23<span class="kpi-unit">×</span></div>
+      <div class="kpi-sub">點擊後 7 天歸因</div>
+    </div>
+    <div class="kpi ad">
+      <div class="kpi-label">Meta 歸因購買</div>
+      <div class="kpi-value">478<span class="kpi-unit">筆</span></div>
+      <div class="kpi-sub">CPA 329　Meta 佔 ECOM 訂單 32%</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">曝光次數</div>
+      <div class="kpi-value">940,850</div>
+      <div class="kpi-sub">CPM 167　觸及 487,523</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Active 廣告 ROAS</div>
+      <div class="kpi-value">5.01<span class="kpi-unit">×</span></div>
+      <div class="kpi-sub">26 支　花費 109,744</div>
+    </div>
+    <div class="kpi warn">
+      <div class="kpi-label">Inactive 廣告 ROAS</div>
+      <div class="kpi-value">2.43<span class="kpi-unit">×</span></div>
+      <div class="kpi-sub">31 支　花費 47,877（佔 30%）</div>
+    </div>
+    <div class="kpi ad">
+      <div class="kpi-label">Meta 歸因 / ECOM 實際</div>
+      <div class="kpi-value">37<span class="kpi-unit">%</span></div>
+      <div class="kpi-sub">666,069 / 1,800,855</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div><b>為什麼 Blended ROAS 11.43 卻 Meta 歸因 ROAS 只有 4.23？</b>Meta 只能歸因到它自家點擊後 7 天內的購買；其餘營收來自自然搜尋、直接輸入、EDM、會員日推播、老客戶回購等非 Meta 路徑。這兩個數字都是真的，只是意義不同：Blended 是「這筆廣告預算在整個生意上帶動多少營收」，Meta ROAS 是「廣告帳號本身的效率」。做廣告優化看 Meta ROAS，做整體預算分配看 Blended。</div>
+  </div>
+
+  <!-- ========== TIMELINE ========== -->
+  <section class="sec">
+    <span class="sec-num">02 / TIMELINE</span>
+    <h2 class="sec-title">每日 <em>訂單與取消</em></h2>
+    <div class="sec-note">紅色為當日取消金額。4/2 取消金額 198,906 幾乎可確認為 4/1 訂單的後續反悔。</div>
+  </section>
+  <div class="chart-wrap">
+    <div class="chart-canvas tall"><canvas id="dailyChart"></canvas></div>
+  </div>
+
+  <!-- ========== RED FLAGS ========== -->
+  <section class="sec">
+    <span class="sec-num">03 / RED FLAGS</span>
+    <h2 class="sec-title">需要 <em>關注的訊號</em></h2>
+    <div class="sec-note">四件事在指標中被稀釋，需要單獨列出提醒團隊。</div>
+  </section>
+  <div class="warn-panel">
+    <h3>四個需要追查的問題</h3>
+    <div class="warn-list">
+      <div class="warn-item">
+        <div class="warn-item-title">4/2 淨銷售額為負</div>
+        <p>當日取消 <span class="n">198,906</span>，大於當日訂單 <span class="n">173,980</span>，淨銷售 <span class="n">−24,926</span>。幾乎可確認是 4/1 高單日（250,827）的集中反悔，而非 4/2 自身表現差。</p>
+        <p style="color:var(--ink-mute);margin-top:6px">→ 行動：調 4/1→4/2 的取消原因（缺貨？物流？改單？）。</p>
+      </div>
+      <div class="warn-item">
+        <div class="warn-item-title">整體取消率 18.8%（金額）偏高</div>
+        <p>15 天共 <span class="n">338,008</span> 取消金額，佔營業額 <span class="n">18.8%</span>；筆數取消率 <span class="n">8.9%</span>。電商健康區間通常 5–8%。</p>
+        <p style="color:var(--ink-mute);margin-top:6px">→ 行動：抽樣檢視大額取消單是否集中在 x6 大盒裝、母親節組。</p>
+      </div>
+      <div class="warn-item">
+        <div class="warn-item-title">「購物車 969 / 訂單 1,476」不是轉換率</div>
+        <p>訂單數 > 購物車數，代表「購物車」欄只計新開車次，訂單包含分單、補款、客服補建。<b>不能用「1476/969」當結帳完成率。</b>若要看真實 CVR，請從 GA4 拉 session 與 add-to-cart 事件。</p>
+      </div>
+      <div class="warn-item">
+        <div class="warn-item-title">玫瑰安瓶廣告效率最弱的旗艦商品</div>
+        <p>玫瑰安瓶廣告組花費 <span class="n">29,661</span>，Meta ROAS 僅 <span class="n">2.81</span>、Blended ROAS <span class="n">4.77</span>，在 6 個廣告組中 Blended 倒數第 2。相比紅麴花 21,545 拿到 Meta ROAS 8.48。</p>
+        <p style="color:var(--ink-mute);margin-top:6px">→ 行動：檢視素材（image_yen 系列 vs video）、受眾、或落地頁轉換是否有問題。</p>
+      </div>
+    </div>
+  </div>
+
+  <section class="sec">
+    <span class="sec-num">04 / CANCEL RATIO</span>
+    <h2 class="sec-title">每日 <em>取消佔比</em></h2>
+    <div class="sec-note">把取消金額換算成當日營收的百分比，看異常日是孤立事件還是系統性問題。</div>
+  </section>
+  <div class="chart-wrap">
+    <div class="chart-canvas short"><canvas id="cancelChart"></canvas></div>
+  </div>
+
+  <div class="section-divider">— Ads · 廣告面 —</div>
+
+  <!-- ========== AD GROUP PERFORMANCE ========== -->
+  <section class="sec">
+    <span class="sec-num">05 / AD GROUP PERFORMANCE</span>
+    <h2 class="sec-title">廣告組合 <em>效率排名</em></h2>
+    <div class="sec-note">按廣告組合聚合，呈現花費、Meta 歸因 ROAS、Blended ROAS 三個視角。Blended 考量所有營收通路，解釋力較完整。</div>
+  </section>
+  <div class="chart-wrap">
+    <div class="chart-title">廣告組合：花費 vs 兩種 ROAS</div>
+    <div class="chart-sub">橫條為花費（NT$），點為 ROAS</div>
+    <div class="chart-canvas tall"><canvas id="adGroupChart"></canvas></div>
+  </div>
+
+  <!-- ========== SALES × ADS MATRIX ========== -->
+  <section class="sec">
+    <span class="sec-num">06 / CROSS MATRIX</span>
+    <h2 class="sec-title">銷售 × <em>廣告對照</em></h2>
+    <div class="sec-note">每個廣告組合對應的 ECOM 實際銷售與 Meta 歸因金額比較。貢獻比 = Meta 歸因 ÷ ECOM 實際；貢獻比越高代表這條廣告越能解釋該品類的營收，貢獻比超過 100% 通常是歸因重複或 SKU 對照不全。</div>
+  </section>
+  <div class="chart-wrap">
+    <table class="tbl" style="margin-top:4px">
+      <thead>
+        <tr>
+          <th>廣告組合</th>
+          <th class="num">廣告花費</th>
+          <th class="num">Meta ROAS</th>
+          <th class="num">Meta 歸因</th>
+          <th class="num">ECOM 實際</th>
+          <th class="num">貢獻比</th>
+          <th class="num">Blended ROAS</th>
+          <th>判讀</th>
+        </tr>
+      </thead>
+      <tbody id="matrixTable"></tbody>
+    </table>
+    <div style="margin-top:10px;font-size:11.5px;color:var(--ink-mute);font-family:var(--mono)">
+      註：「ECOM 實際」為對應商品 SKU 合計；卸妝水組 4/16 才上線故銷售尚未起算。
+    </div>
+  </div>
+
+  <!-- ========== TOP PRODUCTS ========== -->
+  <section class="sec">
+    <span class="sec-num">07 / TOP PRODUCTS</span>
+    <h2 class="sec-title">商品 <em>排行</em></h2>
+    <div class="sec-note">前 10 大商品貢獻 76% 營業額，集中度偏高。</div>
+  </section>
+  <div class="two-col">
+    <div class="chart-wrap">
+      <div class="chart-title">Top 10 · 按訂單金額</div>
+      <div class="chart-sub">REVENUE CONTRIBUTION</div>
+      <div class="chart-canvas tall"><canvas id="topRevChart"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Top 10 明細</div>
+      <div class="chart-sub">單位：NT$ / 件</div>
+      <table class="tbl" style="margin-top:8px">
+        <thead>
+          <tr><th>#</th><th>商品</th><th class="num">金額</th><th class="num">件</th></tr>
+        </thead>
+        <tbody id="topTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ========== CATEGORY ========== -->
+  <section class="sec">
+    <span class="sec-num">08 / CATEGORY MIX</span>
+    <h2 class="sec-title">品類 <em>結構</em></h2>
+  </section>
+  <div class="two-col even">
+    <div class="chart-wrap">
+      <div class="chart-title">營業額品類佔比</div>
+      <div class="chart-sub">BY CATEGORY</div>
+      <div class="chart-canvas"><canvas id="catChart"></canvas></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">促銷型態結構</div>
+      <div class="chart-sub">BY CAMPAIGN PACK</div>
+      <div class="chart-canvas"><canvas id="packChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ========== SO WHAT ========== -->
+  <section class="sec">
+    <span class="sec-num">09 / SO WHAT</span>
+    <h2 class="sec-title">讀到 <em>什麼</em></h2>
+  </section>
+
+  <div class="insight">
+    <h4>銷售面觀察</h4>
+    <ul>
+      <li><b>1. 4/2 集中取消需歸因。</b>單日 198,906 的取消金額不是隨機現象。請調出這批取消單的原因碼，判斷是「促銷結束後反悔」「缺貨補款失敗」還是「物流問題」。若找不到原因碼，下次活動會再發生。</li>
+      <li><b>2. 營收高度依賴「組合促銷」。</b>「超人氣組合＋APP限定＋節慶限定＋會員日」四類合計佔 62%，單品常規只佔 9%。這代表現在是「檔期驅動」的生意，只要有一檔疲軟就會直接掉月營收。</li>
+      <li><b>3. 玫瑰超導全能乳液 30ml 實績與定位不對稱。</b>單品 30ml 新品僅售 6 件（13,239 元），反而是母親節安瓶 x6 組合賣 51 件（123,192 元）。乳液若是旗艦，需檢視：售價？廣告？主力被組合吸走？</li>
+      <li><b>4. AOV 從 Q1 的 1,300 降到 1,220（−6%）。</b>若 4 月下半月 AOV 繼續下滑，代表組合品在被新客包與「買 1 送 1」稀釋。</li>
+    </ul>
+  </div>
+
+  <div class="insight" style="border-left-color:var(--alt)">
+    <h4 style="color:var(--alt)">廣告面觀察</h4>
+    <ul>
+      <li><b>5. 紅麴是目前最有效率的廣告組。</b>花費 21,545 / Meta ROAS 8.48 / Blended ROAS 8.35。內部「紅麴_260312_h」單支 ROAS 15.13、「轉換a」ROAS 17.38（但才花 602）。<b>行動建議：把 a 和 h 這類高 ROAS 低花費的素材加大預算測試</b>，把紅麴月花費上限拉高。</li>
+      <li><b>6. 氣墊粉餅是第二名優等生。</b>14 支廣告中只剩 5 支 active，inactive 花費僅 282 — 操作團隊很果斷，測不出效就快速關停，這個疊代模式應複製到其他組合。Meta ROAS 6.14、Blended ROAS 8.27。</li>
+      <li><b>7. app防曬＆胺基酸潔顏乳組合花費最多，但 Meta ROAS 只 2.95。</b>花費 37,330（佔總預算 24%），12 支廣告已關 9 支，active 僅 3 支。內部「app防曬d」ROAS 4.00 可放大；「app防曬b、c」ROAS 0.86–1.23 應立即關停。Blended ROAS 9.57 代表這個品類確實在帶動全站銷售，但 Meta 帳號內的效率有優化空間。</li>
+      <li><b>8. 毛孔洗面乳是銷售 TOP 1 但廣告效率墊底。</b>銷售第一（204,898）卻 Meta ROAS 2.64、Blended ROAS 6.03。推測：這個品本身有自然流量/口碑回購，廣告的邊際貢獻低。<b>建議降低毛孔洗面乳的廣告預算，把錢移到紅麴和氣墊粉餅。</b></li>
+      <li><b>9. 玫瑰安瓶廣告效率弱（見 Red Flag 4）。</b>旗艦商品花 29,661 換到 Blended ROAS 4.77；多數素材為 image 版本，video_yen_a（ROAS 4.09）表現最佳但花費少。<b>建議加碼 video 版本測試</b>，或檢視落地頁是否有轉換阻礙。</li>
+      <li><b>10. Inactive 廣告吃掉 30% 預算（47,877）。</b>這些是期間內被關掉的廣告，CPA 532 明顯高於 active 的 283。操作方向正確（關停低效），但要問：這些廣告是不是上線後太久才被關？若能把關停反應時間縮短 2–3 天，這筆預算可以重新配置到高效廣告。</li>
+    </ul>
+  </div>
+
+  <div class="insight" style="border-left-color:var(--pos)">
+    <h4 style="color:var(--pos)">下一步建議（依優先度）</h4>
+    <ul>
+      <li><b>本週立即：</b>調出 4/2 的 39 筆取消單原因碼；關停 app防曬b、c、毛孔洗面乳組合e 這 3 支低 ROAS 廣告。</li>
+      <li><b>本週規劃：</b>紅麴_轉換a（ROAS 17.38，花費 602）預算放大 5–10 倍測試上限；玫瑰安瓶改以 video_yen 系列為主力，暫停 image_yen_a、b、c 複本。</li>
+      <li><b>下週：</b>重新評估毛孔洗面乳廣告預算（目前 36,652），考慮部分轉移至紅麴與氣墊粉餅。</li>
+      <li><b>下週規劃：</b>建立「active 廣告 72 小時內 ROAS &lt; 1.5 自動提醒」機制，縮短關停反應時間。</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    SOURCE · 商品報表_utf8_bom.csv ＋ 商店銷售統計表_20260416102258.xlsx ＋ Meta Ads export（4/1–4/16）　／　GENERATED · 2026-04-16
+  </div>
+</div>
+
+<script>
+const FG='#1a1a17', SOFT='#4a443a', MUTE='#8a8475', LINE='rgba(26,26,23,.09)', ACCENT='#8c6b22', ACCENT_SOFT='#b89447', WARN='#b8392d', POS='#3e7a51', ALT='#3e6d94';
+
+Chart.defaults.font.family = "'Noto Sans TC', system-ui, sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = SOFT;
+Chart.defaults.borderColor = LINE;
+
+const daily = [
+  {d:'4/1',o:250827,c:31574,n:219253,orders:112},
+  {d:'4/2',o:173980,c:198906,n:-24926,orders:99},
+  {d:'4/3',o:78059,c:4900,n:73159,orders:71},
+  {d:'4/4',o:87587,c:9445,n:78142,orders:75},
+  {d:'4/5',o:322837,c:19243,n:303594,orders:311},
+  {d:'4/6',o:110148,c:19594,n:90554,orders:105},
+  {d:'4/7',o:78833,c:488,n:78345,orders:76},
+  {d:'4/8',o:60084,c:2461,n:57623,orders:63},
+  {d:'4/9',o:111331,c:8477,n:102854,orders:88},
+  {d:'4/10',o:123847,c:8106,n:115741,orders:104},
+  {d:'4/11',o:66963,c:11070,n:55893,orders:59},
+  {d:'4/12',o:75277,c:8245,n:67032,orders:74},
+  {d:'4/13',o:75434,c:7620,n:67814,orders:69},
+  {d:'4/14',o:78584,c:0,n:78584,orders:74},
+  {d:'4/15',o:107064,c:7879,n:99185,orders:96},
+];
+
+new Chart(document.getElementById('dailyChart'), {
+  data: {
+    labels: daily.map(d=>d.d),
+    datasets:[
+      {type:'bar', label:'訂單金額', data:daily.map(d=>d.o), backgroundColor:ACCENT_SOFT+'dd', borderColor:ACCENT, borderWidth:0, order:2, yAxisID:'y'},
+      {type:'bar', label:'取消金額', data:daily.map(d=>d.c), backgroundColor:WARN+'cc', borderColor:WARN, borderWidth:0, order:1, yAxisID:'y'},
+      {type:'line', label:'訂單筆數', data:daily.map(d=>d.orders), borderColor:ALT, backgroundColor:'transparent', borderWidth:1.8, pointRadius:3, pointBackgroundColor:ALT, tension:.25, yAxisID:'y2', order:0}
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    interaction:{mode:'index', intersect:false},
+    plugins:{
+      legend:{position:'top', align:'end', labels:{color:FG, usePointStyle:true, padding:16, font:{size:11}}},
+      tooltip:{backgroundColor:'#ffffff', titleColor:FG, bodyColor:FG, borderColor:'rgba(26,26,23,.15)', borderWidth:1, padding:12, titleFont:{family:"'Fraunces',serif",size:14}, callbacks:{
+        label: ctx => {
+          if(ctx.dataset.label==='訂單筆數') return ` 訂單筆數：${ctx.parsed.y}`;
+          return ` ${ctx.dataset.label}：NT$ ${ctx.parsed.y.toLocaleString()}`;
+        }
+      }}
+    },
+    scales:{
+      x:{grid:{display:false}, ticks:{color:SOFT}},
+      y:{position:'left', grid:{color:LINE}, ticks:{color:SOFT, callback:v=>v>=1000?(v/1000)+'K':v}, title:{display:true,text:'金額 (NT$)',color:MUTE,font:{size:10}}},
+      y2:{position:'right', grid:{display:false}, ticks:{color:ALT}, title:{display:true,text:'訂單筆數',color:ALT,font:{size:10}}}
+    }
+  }
+});
+
+const cancelRatio = daily.map(d=>({d:d.d, r: d.o>0 ? (d.c/d.o*100) : 0}));
+new Chart(document.getElementById('cancelChart'), {
+  type:'bar',
+  data:{
+    labels: cancelRatio.map(x=>x.d),
+    datasets:[{
+      label:'當日取消 / 訂單金額 (%)',
+      data: cancelRatio.map(x=>x.r),
+      backgroundColor: cancelRatio.map(x=> x.r>50?WARN : x.r>15?'#d89434' : ACCENT_SOFT+'99'),
+      borderWidth:0
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{backgroundColor:'#ffffff', titleColor:FG, bodyColor:FG, borderColor:'rgba(26,26,23,.15)', borderWidth:1, callbacks:{label: ctx=> ` 取消佔比：${ctx.parsed.y.toFixed(1)}%`}}
+    },
+    scales:{
+      x:{grid:{display:false}, ticks:{color:SOFT}},
+      y:{grid:{color:LINE}, ticks:{color:SOFT, callback:v=>v+'%'}, suggestedMax:120}
+    }
+  }
+});
+
+// ===== Ad group combined chart =====
+const adGroups = [
+  {n:'紅麴_轉換', spend:21545, metaROAS:8.48, blended:8.35, ecom:179951, meta:182777, purchases:87},
+  {n:'氣墊粉餅組合', spend:31457, metaROAS:6.14, blended:8.27, ecom:260115, meta:193230, purchases:200},
+  {n:'app防曬＆潔顏組合', spend:37330, metaROAS:2.95, blended:9.57, ecom:357193, meta:109957, purchases:68},
+  {n:'毛孔洗面乳組合', spend:36652, metaROAS:2.64, blended:6.03, ecom:221092, meta:96715, purchases:80},
+  {n:'玫瑰安瓶_轉換', spend:29661, metaROAS:2.81, blended:4.77, ecom:141365, meta:83390, purchases:43},
+  {n:'卸妝水買2送1', spend:976, metaROAS:0, blended:6.78, ecom:6618, meta:0, purchases:0},
+];
+
+new Chart(document.getElementById('adGroupChart'), {
+  data:{
+    labels: adGroups.map(a=>a.n),
+    datasets:[
+      {type:'bar', label:'廣告花費 (NT$)', data:adGroups.map(a=>a.spend), backgroundColor:ALT+'cc', borderWidth:0, order:3, yAxisID:'y'},
+      {type:'line', label:'Meta 歸因 ROAS', data:adGroups.map(a=>a.metaROAS), borderColor:ACCENT, backgroundColor:ACCENT, borderWidth:2, pointRadius:5, pointStyle:'circle', tension:0, yAxisID:'y2', order:1},
+      {type:'line', label:'Blended ROAS', data:adGroups.map(a=>a.blended), borderColor:POS, backgroundColor:POS, borderWidth:2, pointRadius:5, pointStyle:'rectRot', tension:0, yAxisID:'y2', order:0}
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{
+      legend:{position:'top', align:'end', labels:{color:FG, usePointStyle:true, padding:16, font:{size:11.5}}},
+      tooltip:{backgroundColor:'#ffffff', titleColor:FG, bodyColor:FG, borderColor:'rgba(26,26,23,.15)', borderWidth:1, callbacks:{
+        label: ctx => {
+          if(ctx.dataset.type==='line') return ` ${ctx.dataset.label}：${ctx.parsed.y.toFixed(2)}×`;
+          return ` ${ctx.dataset.label}：NT$ ${ctx.parsed.y.toLocaleString()}`;
+        }
+      }}
+    },
+    scales:{
+      x:{grid:{display:false}, ticks:{color:SOFT, font:{size:11.5}}},
+      y:{position:'left', grid:{color:LINE}, ticks:{color:SOFT, callback:v=>(v/1000)+'K'}, title:{display:true,text:'花費 (NT$)',color:MUTE,font:{size:10}}},
+      y2:{position:'right', grid:{display:false}, ticks:{color:ACCENT, callback:v=>v+'×'}, title:{display:true,text:'ROAS',color:ACCENT,font:{size:10}}, beginAtZero:true, max:12}
+    }
+  }
+});
+
+// ===== Cross Matrix Table =====
+const matrix = [
+  {n:'紅麴_轉換', spend:21545, metaROAS:8.48, meta:182777, ecom:179951, blended:8.35, verdict:{label:'優等生 · 放大',cls:'good'}},
+  {n:'氣墊粉餅組合', spend:31457, metaROAS:6.14, meta:193230, ecom:260115, blended:8.27, verdict:{label:'健康 · 維持',cls:'good'}},
+  {n:'app防曬＆潔顏組合', spend:37330, metaROAS:2.95, meta:109957, ecom:357193, blended:9.57, verdict:{label:'帳號低效但 Blended 高',cls:'mid'}},
+  {n:'毛孔洗面乳組合', spend:36652, metaROAS:2.64, meta:96715, ecom:221092, blended:6.03, verdict:{label:'預算可移出',cls:'bad'}},
+  {n:'玫瑰安瓶_轉換', spend:29661, metaROAS:2.81, meta:83390, ecom:141365, blended:4.77, verdict:{label:'旗艦但低效',cls:'bad'}},
+  {n:'卸妝水買2送1', spend:976, metaROAS:0, meta:0, ecom:6618, blended:6.78, verdict:{label:'4/16 剛上線',cls:'mid'}},
+];
+const mbody = document.getElementById('matrixTable');
+matrix.forEach(m=>{
+  const ratio = m.ecom>0 ? (m.meta/m.ecom*100).toFixed(0)+'%' : '—';
+  const roasCls = m.metaROAS>=5 ? 'color:var(--pos);font-weight:600' : m.metaROAS>=3 ? 'color:#a06d18' : 'color:var(--warn);font-weight:600';
+  const blendCls = m.blended>=7 ? 'color:var(--pos);font-weight:600' : m.blended>=4 ? 'color:#a06d18' : 'color:var(--warn);font-weight:600';
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td style="font-weight:500">${m.n}</td>
+    <td class="num">${m.spend.toLocaleString()}</td>
+    <td class="num" style="${roasCls}">${m.metaROAS.toFixed(2)}×</td>
+    <td class="num">${m.meta.toLocaleString()}</td>
+    <td class="num">${m.ecom.toLocaleString()}</td>
+    <td class="num">${ratio}</td>
+    <td class="num" style="${blendCls}">${m.blended.toFixed(2)}×</td>
+    <td><span class="tag ${m.verdict.cls}">${m.verdict.label}</span></td>`;
+  mbody.appendChild(tr);
+});
+
+// ===== Top products =====
+const top10 = [
+  {n:'超淨化毛孔洗面乳 x3', r:204898, q:229},
+  {n:'3D極緻亮白隔離防曬霜 x4', r:195226, q:138},
+  {n:'晶燦白皙氣墊粉餅 x2', r:192801, q:211},
+  {n:'紅麴納豆膠囊 x6 (360日)', r:133958, q:41},
+  {n:'玫瑰超導全能安瓶 x6（母親節）', r:123192, q:51},
+  {n:'3D高濃度胺基酸潔顏乳 x4', r:116026, q:81},
+  {n:'亮白保濕化妝水 買1送1', r:100445, q:128},
+  {n:'敏弱養膚組', r:83860, q:53},
+  {n:'B5保濕修護精華 買2送1', r:74460, q:70},
+  {n:'H7抗老緊緻精華 買1送1', r:72770, q:48},
+];
+new Chart(document.getElementById('topRevChart'),{
+  type:'bar',
+  data:{
+    labels: top10.map(p=>p.n),
+    datasets:[{label:'訂單金額', data: top10.map(p=>p.r), backgroundColor: ACCENT_SOFT+'dd', borderWidth:0}]
+  },
+  options:{
+    indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{backgroundColor:'#ffffff', titleColor:FG, bodyColor:FG, borderColor:'rgba(26,26,23,.15)', borderWidth:1, callbacks:{label: ctx=> ` NT$ ${ctx.parsed.x.toLocaleString()}`}}
+    },
+    scales:{
+      x:{grid:{color:LINE}, ticks:{color:SOFT, callback:v=>(v/1000)+'K'}},
+      y:{grid:{display:false}, ticks:{color:FG, font:{size:11.5}}}
+    }
+  }
+});
+
+const tbody = document.getElementById('topTable');
+top10.forEach((p,i)=>{
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td class="rank">${String(i+1).padStart(2,'0')}</td>
+                  <td>${p.n}</td>
+                  <td class="num">${p.r.toLocaleString()}</td>
+                  <td class="num">${p.q}</td>`;
+  tbody.appendChild(tr);
+});
+
+// ===== Category donut =====
+const cats = [
+  {n:'洗面 / 潔顏', v:436266, c:'#8c6b22'},
+  {n:'精華 / 乳液', v:433496, c:'#b89447'},
+  {n:'防曬 / 隔離', v:356010, c:'#d4b16b'},
+  {n:'彩妝', v:195788, c:'#3e7a51'},
+  {n:'保健食品', v:179951, c:'#3e6d94'},
+  {n:'化妝水', v:112511, c:'#7d5fa3'},
+  {n:'私密清潔', v:76085, c:'#d89434'},
+  {n:'卸妝', v:6618, c:'#a09c90'},
+  {n:'周邊', v:4130, c:'#c9c5b8'},
+];
+new Chart(document.getElementById('catChart'),{
+  type:'doughnut',
+  data:{labels: cats.map(c=>c.n), datasets:[{data:cats.map(c=>c.v), backgroundColor:cats.map(c=>c.c), borderColor:'#ffffff', borderWidth:2}]},
+  options:{
+    responsive:true, maintainAspectRatio:false, cutout:'62%',
+    plugins:{
+      legend:{position:'right', labels:{color:FG, usePointStyle:true, padding:10, font:{size:11.5}, generateLabels:ch=>{
+        const tot = ch.data.datasets[0].data.reduce((a,b)=>a+b,0);
+        return ch.data.labels.map((l,i)=>{
+          const v = ch.data.datasets[0].data[i];
+          return {text: `${l}  ${(v/tot*100).toFixed(1)}%`, fillStyle:ch.data.datasets[0].backgroundColor[i], strokeStyle:ch.data.datasets[0].backgroundColor[i], pointStyle:'circle'};
+        });
+      }}},
+      tooltip:{backgroundColor:'#ffffff', titleColor:FG, bodyColor:FG, borderColor:'rgba(26,26,23,.15)', borderWidth:1, callbacks:{label: ctx=> ` NT$ ${ctx.parsed.toLocaleString()}`}}
+    }
+  }
+});
+
+const packs = [
+  {n:'超人氣組合', v:576135},
+  {n:'APP限定', v:311252},
+  {n:'新品上市', v:200404},
+  {n:'單品 / 常規', v:166998},
+  {n:'明星商品特賣', v:147230},
+  {n:'節慶限定', v:137539},
+  {n:'新客試用包', v:125754},
+  {n:'會員日促銷', v:100445},
+  {n:'加價購', v:35098},
+];
+new Chart(document.getElementById('packChart'),{
+  type:'bar',
+  data:{labels: packs.map(p=>p.n), datasets:[{data: packs.map(p=>p.v), backgroundColor: packs.map((p,i)=> i<2 ? ACCENT+'dd' : (i<5 ? ACCENT_SOFT+'cc' : '#a09c90cc')), borderWidth:0}]},
+  options:{
+    indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{backgroundColor:'#ffffff', titleColor:FG, bodyColor:FG, borderColor:'rgba(26,26,23,.15)', borderWidth:1, callbacks:{label: ctx=> ` NT$ ${ctx.parsed.x.toLocaleString()}`}}
+    },
+    scales:{
+      x:{grid:{color:LINE}, ticks:{color:SOFT, callback:v=>(v/1000)+'K'}},
+      y:{grid:{display:false}, ticks:{color:FG, font:{size:11.5}}}
+    }
+  }
+});
+</script>
+</body>
+</html>
