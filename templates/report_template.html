@@ -576,7 +576,7 @@
   });
 
   // --- Ads ---
-  const ag = DATA.ad_groups;
+  const ag = DATA.ad_groups.filter(a => a.status === 'active');
   const adLabels = ag.map(a => a.group);
   window._charts.chartAdSpend = new Chart(document.getElementById('chartAdSpend'), {
     type: 'doughnut',
