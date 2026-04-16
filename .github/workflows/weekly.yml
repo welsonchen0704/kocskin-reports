@@ -80,10 +80,11 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "chore(report): auto-update $(date -u +%Y-%m-%dT%H:%M:%SZ)"
             git fetch origin main
-            git rebase origin/main -X ours
-            git push
+          git reset --soft origin/main
+          git add state/history.json state/last_run.json logs/ dist/index.html || true
+          git commit -m "chore(report): auto-update $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push
           fi
 
       - name: Upload Pages artifact
