@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>KOCSKIN 週報 | {{ payload.period_start }} ~ {{ payload.period_end }}</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f172a;
+    --panel: #1e293b;
+    --panel-2: #273449;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --accent-2: #fbbf24;
+    --ok: #4ade80;
+    --warn: #f87171;
+    --border: #334155;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  header {
+    padding: 24px 32px;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  h1 { margin: 0; font-size: 22px; font-weight: 600; letter-spacing: 0.5px; }
+  .period { color: var(--muted); font-size: 14px; }
+  main { padding: 24px 32px 64px; max-width: 1400px; margin: 0 auto; }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .kpi {
+    background: var(--panel);
+    padding: 18px 20px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .kpi-label { color: var(--muted); font-size: 13px; margin-bottom: 6px; }
+  .kpi-value { font-size: 26px; font-weight: 600; color: var(--text); }
+  .kpi-sub { color: var(--muted); font-size: 12px; margin-top: 4px; }
+
+  section {
+    background: var(--panel);
+    padding: 24px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+  h2 { font-size: 16px; margin: 0 0 16px; font-weight: 600; color: var(--accent); }
+  .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin: 8px 0 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .chart-wrap { position: relative; height: 340px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  th, td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th { color: var(--muted); font-weight: 500; background: var(--panel-2); position: sticky; top: 0; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tbody tr:hover { background: var(--panel-2); }
+  .pill {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 11px;
+    border-radius: 10px;
+    background: rgba(56,189,248,0.15);
+    color: var(--accent);
+  }
+  .pill.warn { background: rgba(248,113,113,0.15); color: var(--warn); }
+  .pill.ok { background: rgba(74,222,128,0.15); color: var(--ok); }
+
+  .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+  .tab {
+    padding: 10px 18px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-size: 14px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    padding: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .scroll-y { max-height: 480px; overflow-y: auto; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>KOCSKIN 銷售週報</h1>
+    <div class="period">資料期間：{{ payload.period_start }} ～ {{ payload.period_end }}　｜　產生時間：{{ payload.generated_at }}</div>
+  </div>
+  <div class="pill">累計執行 {{ payload.runs_count }} 次</div>
+</header>
+
+<main>
+
+  <!-- === 銷售資料 === -->
+  <h2 class="section-title">銷售資料</h2>
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-label">訂單筆數</div>
+      <div class="kpi-value" id="kpi-orders">0</div>
+      <div class="kpi-sub">TS 訂單（含取消/退貨前）</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">訂單金額</div>
+      <div class="kpi-value" id="kpi-gross">$0</div>
+      <div class="kpi-sub">折扣後總金額 (ECOM 實際營收)</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">取消金額</div>
+      <div class="kpi-value" id="kpi-cancel-amount">$0</div>
+      <div class="kpi-sub" id="kpi-cancel-sub">-</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">淨銷售額</div>
+      <div class="kpi-value" id="kpi-net">$0</div>
+      <div class="kpi-sub">扣除取消 / 退貨後</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">平均客單價</div>
+      <div class="kpi-value" id="kpi-aov">$0</div>
+      <div class="kpi-sub">訂單金額 / 訂單數</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">取消率</div>
+      <div class="kpi-value" id="kpi-cancel">0%</div>
+      <div class="kpi-sub">取消單 / 總訂單</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">退貨率</div>
+      <div class="kpi-value" id="kpi-return">0%</div>
+      <div class="kpi-sub">退貨單 / 總訂單</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">商品數</div>
+      <div class="kpi-value" id="kpi-items">0</div>
+      <div class="kpi-sub">累計商品銷售數量</div>
+    </div>
+  </div>
+
+  <!-- === 廣告資料 === -->
+  <h2 class="section-title">廣告資料</h2>
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-label">廣告花費</div>
+      <div class="kpi-value" id="kpi-adspend">$0</div>
+      <div class="kpi-sub" id="kpi-adspend-sub">-</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Blended ROAS</div>
+      <div class="kpi-value"><span id="kpi-blended">0</span>×</div>
+      <div class="kpi-sub">ECOM營收 / 廣告花費</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Meta 歸因 ROAS</div>
+      <div class="kpi-value"><span id="kpi-meta-roas">0</span>×</div>
+      <div class="kpi-sub">點擊後 7 天歸因</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Meta 歸因購買</div>
+      <div class="kpi-value"><span id="kpi-meta-pur">0</span>筆</div>
+      <div class="kpi-sub" id="kpi-meta-pur-sub">-</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">曝光次數</div>
+      <div class="kpi-value" id="kpi-impressions">0</div>
+      <div class="kpi-sub" id="kpi-impressions-sub">-</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Active 廣告 ROAS</div>
+      <div class="kpi-value"><span id="kpi-active-roas">0</span>×</div>
+      <div class="kpi-sub" id="kpi-active-sub">-</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Inactive 廣告 ROAS</div>
+      <div class="kpi-value"><span id="kpi-inactive-roas">0</span>×</div>
+      <div class="kpi-sub" id="kpi-inactive-sub">-</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Meta 歸因 / ECOM 實際</div>
+      <div class="kpi-value"><span id="kpi-attribution">0</span>%</div>
+      <div class="kpi-sub" id="kpi-attribution-sub">-</div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" data-tab="daily">每日銷售趨勢</button>
+    <button class="tab" data-tab="products">熱銷商品 Top 15</button>
+    <button class="tab" data-tab="ads">廣告成效</button>
+    <button class="tab" data-tab="ga" id="tab-btn-ga" style="display:none">GA 流量分析</button>
+    <button class="tab" data-tab="raw">詳細資料</button>
+  </div>
+
+  <!-- Tab: Daily -->
+  <div class="tab-panel active" id="tab-daily">
+    <section>
+      <h2>每日淨銷售額 &amp; 訂單筆數</h2>
+      <div class="chart-wrap"><canvas id="chartDaily"></canvas></div>
+    </section>
+    <div class="grid-2">
+      <section>
+        <h2>每日取消 / 退貨單筆數</h2>
+        <div class="chart-wrap"><canvas id="chartCancel"></canvas></div>
+      </section>
+      <section>
+        <h2>每日折扣金額</h2>
+        <div class="chart-wrap"><canvas id="chartDiscount"></canvas></div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Tab: Products -->
+  <div class="tab-panel" id="tab-products">
+    <section>
+      <h2>熱銷商品 Top 15（依銷售數量）</h2>
+      <div class="chart-wrap" style="height:520px"><canvas id="chartTopProducts"></canvas></div>
+    </section>
+    <section>
+      <h2>商品明細</h2>
+      <div class="scroll-y">
+        <table id="tblProducts">
+          <thead>
+            <tr>
+              <th>#</th><th>商品名稱</th>
+              <th class="num">銷售數量</th>
+              <th class="num">訂單數</th>
+              <th class="num">訂單金額</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <!-- Tab: Ads -->
+  <div class="tab-panel" id="tab-ads">
+    <div class="grid-2">
+      <section>
+        <h2>廣告組合花費分布</h2>
+        <div class="chart-wrap"><canvas id="chartAdSpend"></canvas></div>
+      </section>
+      <section>
+        <h2>廣告組合 ROAS</h2>
+        <div class="chart-wrap"><canvas id="chartAdRoas"></canvas></div>
+      </section>
+    </div>
+    <section>
+      <h2>廣告組合明細</h2>
+      <div class="scroll-y">
+        <table id="tblAds">
+          <thead>
+            <tr>
+              <th>廣告組合</th>
+              <th class="num">花費</th>
+              <th class="num">曝光</th>
+              <th class="num">觸及</th>
+              <th class="num">購買</th>
+              <th class="num">ROAS</th>
+              <th class="num">CPM</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <!-- Tab: GA -->
+  <div class="tab-panel" id="tab-ga">
+    <h2 class="section-title">GA4 流量總覽</h2>
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-label">Sessions</div>
+        <div class="kpi-value" id="ga-sessions">0</div>
+        <div class="kpi-sub">總造訪數</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Total Users</div>
+        <div class="kpi-value" id="ga-users">0</div>
+        <div class="kpi-sub" id="ga-users-sub">-</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Page Views</div>
+        <div class="kpi-value" id="ga-pv">0</div>
+        <div class="kpi-sub">頁面瀏覽量</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">GA 購買事件</div>
+        <div class="kpi-value" id="ga-conv">0</div>
+        <div class="kpi-sub" id="ga-conv-sub">-</div>
+      </div>
+    </div>
+
+    <section>
+      <h2>每日 Sessions / Users</h2>
+      <div class="chart-wrap"><canvas id="chartGaDaily"></canvas></div>
+    </section>
+
+    <div class="grid-2">
+      <section>
+        <h2>流量來源 (Default Channel Group)</h2>
+        <div class="chart-wrap"><canvas id="chartGaSource"></canvas></div>
+      </section>
+      <section>
+        <h2>裝置分布</h2>
+        <div class="chart-wrap"><canvas id="chartGaDevice"></canvas></div>
+      </section>
+    </div>
+
+    <section>
+      <h2>Top Landing Pages</h2>
+      <div class="scroll-y">
+        <table id="tblGaLanding">
+          <thead>
+            <tr>
+              <th>Landing Page</th>
+              <th class="num">Sessions</th>
+              <th class="num">Users</th>
+              <th class="num">跳出率</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>流量來源明細</h2>
+      <div class="scroll-y" style="max-height:320px">
+        <table id="tblGaSource">
+          <thead>
+            <tr>
+              <th>Channel</th>
+              <th class="num">Sessions</th>
+              <th class="num">Users</th>
+              <th class="num">Conversions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <!-- Tab: Raw -->
+  <div class="tab-panel" id="tab-raw">
+    <section>
+      <h2>每日銷售明細</h2>
+      <div class="scroll-y">
+        <table id="tblDaily">
+          <thead>
+            <tr>
+              <th>日期</th>
+              <th class="num">訂單數</th>
+              <th class="num">商品數</th>
+              <th class="num">訂單金額</th>
+              <th class="num">折扣</th>
+              <th class="num">取消單</th>
+              <th class="num">退貨單</th>
+              <th class="num">淨銷售</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+</main>
+
+<footer>
+  KOCSKIN 內部報表　｜　Generated {{ payload.generated_at }}
+</footer>
+
+<script id="payload-data" type="application/json">{{ payload_json | safe }}</script>
+<script>
+  const DATA = JSON.parse(document.getElementById('payload-data').textContent);
+  const fmt = n => (n ?? 0).toLocaleString('zh-TW');
+  const money = n => '$' + fmt(Math.round(n || 0));
+  const pct = n => (n || 0).toFixed(2) + '%';
+
+  // --- Sales KPIs ---
+  const S = DATA.kpis_sales;
+  document.getElementById('kpi-orders').textContent = fmt(S.total_orders);
+  document.getElementById('kpi-gross').textContent = money(S.total_gross);
+  document.getElementById('kpi-cancel-amount').textContent = money(S.total_cancel_amount);
+  document.getElementById('kpi-cancel-sub').textContent = `取消 ${fmt(S.total_cancel_orders)} 筆`;
+  document.getElementById('kpi-net').textContent = money(S.total_net_sales);
+  document.getElementById('kpi-aov').textContent = money(S.avg_order_value);
+  document.getElementById('kpi-cancel').textContent = pct(S.cancel_rate);
+  document.getElementById('kpi-return').textContent = pct(S.return_rate);
+  document.getElementById('kpi-items').textContent = fmt(S.total_items);
+
+  // --- Ad KPIs ---
+  const A = DATA.kpis_ad;
+  const DAYS = DATA.period_days || 1;
+  document.getElementById('kpi-adspend').textContent = fmt(A.total_spend) + ' NT$';
+  document.getElementById('kpi-adspend-sub').textContent = `${DAYS} 天平均 ${fmt(A.avg_daily_spend)} / 日`;
+  document.getElementById('kpi-blended').textContent = (A.blended_roas || 0).toFixed(2);
+  document.getElementById('kpi-meta-roas').textContent = (A.meta_roas || 0).toFixed(2);
+  document.getElementById('kpi-meta-pur').textContent = fmt(A.meta_purchases);
+  document.getElementById('kpi-meta-pur-sub').textContent =
+    `CPA ${fmt(A.cpa)}　Meta 佔 ECOM 訂單 ${(A.meta_share_of_orders || 0).toFixed(0)}%`;
+  document.getElementById('kpi-impressions').textContent = fmt(A.total_impressions);
+  document.getElementById('kpi-impressions-sub').textContent =
+    `CPM ${fmt(A.overall_cpm)}　觸及 ${fmt(A.total_reach)}`;
+  document.getElementById('kpi-active-roas').textContent = (A.active.roas || 0).toFixed(2);
+  document.getElementById('kpi-active-sub').textContent =
+    `${A.active.count} 支　花費 ${fmt(A.active.spend)}`;
+  document.getElementById('kpi-inactive-roas').textContent = (A.inactive.roas || 0).toFixed(2);
+  document.getElementById('kpi-inactive-sub').textContent =
+    `${A.inactive.count} 支　花費 ${fmt(A.inactive.spend)}（佔 ${(A.inactive.spend_share || 0).toFixed(0)}%）`;
+  document.getElementById('kpi-attribution').textContent = (A.meta_attribution_rate || 0).toFixed(0);
+  document.getElementById('kpi-attribution-sub').textContent =
+    `${fmt(A.meta_revenue)} / ${fmt(S.total_gross)}`;
+
+  // --- Tabs ---
+  document.querySelectorAll('.tab').forEach(t => {
+    t.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      document.getElementById('tab-' + t.dataset.tab).classList.add('active');
+      // re-flow charts after display change
+      Object.values(window._charts || {}).forEach(c => c.resize());
+    });
+  });
+
+  Chart.defaults.color = '#94a3b8';
+  Chart.defaults.borderColor = '#334155';
+  Chart.defaults.font.family = '-apple-system, PingFang TC, Microsoft JhengHei, sans-serif';
+  window._charts = {};
+
+  // --- Daily charts ---
+  const daily = DATA.daily_series;
+  const labels = daily.map(d => d.date);
+  window._charts.chartDaily = new Chart(document.getElementById('chartDaily'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          type: 'line',
+          label: '訂單筆數',
+          data: daily.map(d => d.orders),
+          borderColor: '#fbbf24',
+          backgroundColor: '#fbbf24',
+          tension: 0.3,
+          yAxisID: 'y2',
+        },
+        {
+          type: 'bar',
+          label: '淨銷售額',
+          data: daily.map(d => d.net_sales),
+          backgroundColor: 'rgba(56,189,248,0.6)',
+          yAxisID: 'y1',
+        },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      scales: {
+        y1: { position: 'left', title: { display: true, text: '淨銷售 (TWD)' } },
+        y2: { position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: '訂單筆數' } },
+      }
+    }
+  });
+
+  window._charts.chartCancel = new Chart(document.getElementById('chartCancel'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: '取消單', data: daily.map(d => d.cancel_orders), backgroundColor: '#f87171' },
+        { label: '退貨單', data: daily.map(d => d.return_orders), backgroundColor: '#fb923c' },
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: false }, y: { stacked: false } } }
+  });
+
+  window._charts.chartDiscount = new Chart(document.getElementById('chartDiscount'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: '折扣金額',
+        data: daily.map(d => d.discount),
+        borderColor: '#a78bfa',
+        backgroundColor: 'rgba(167,139,250,0.2)',
+        fill: true,
+        tension: 0.3,
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+
+  // --- Top products ---
+  const tp = DATA.top_products;
+  window._charts.chartTopProducts = new Chart(document.getElementById('chartTopProducts'), {
+    type: 'bar',
+    data: {
+      labels: tp.map(p => p.name.length > 30 ? p.name.slice(0, 28) + '…' : p.name),
+      datasets: [{
+        label: '銷售數量',
+        data: tp.map(p => p.qty),
+        backgroundColor: 'rgba(74,222,128,0.7)',
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { x: { beginAtZero: true } }
+    }
+  });
+
+  const tbodyP = document.querySelector('#tblProducts tbody');
+  tp.forEach((p, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${i+1}</td><td>${p.name}</td>
+      <td class="num">${fmt(p.qty)}</td>
+      <td class="num">${fmt(p.orders)}</td>
+      <td class="num">${money(p.amount)}</td>`;
+    tbodyP.appendChild(tr);
+  });
+
+  // --- Ads ---
+  const ag = DATA.ad_groups;
+  const adLabels = ag.map(a => a.group);
+  window._charts.chartAdSpend = new Chart(document.getElementById('chartAdSpend'), {
+    type: 'doughnut',
+    data: {
+      labels: adLabels,
+      datasets: [{
+        data: ag.map(a => a.spend),
+        backgroundColor: ['#38bdf8','#fbbf24','#4ade80','#f87171','#a78bfa','#fb923c','#22d3ee','#f472b6']
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+  });
+
+  window._charts.chartAdRoas = new Chart(document.getElementById('chartAdRoas'), {
+    type: 'bar',
+    data: {
+      labels: adLabels,
+      datasets: [{
+        label: 'ROAS',
+        data: ag.map(a => a.roas),
+        backgroundColor: ag.map(a => a.roas >= 3 ? '#4ade80' : a.roas >= 1 ? '#fbbf24' : '#f87171')
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+  });
+
+  const tbodyA = document.querySelector('#tblAds tbody');
+  ag.forEach(a => {
+    const tr = document.createElement('tr');
+    const roasCls = a.roas >= 3 ? 'ok' : a.roas >= 1 ? '' : 'warn';
+    tr.innerHTML = `<td>${a.group}</td>
+      <td class="num">${money(a.spend)}</td>
+      <td class="num">${fmt(a.impressions)}</td>
+      <td class="num">${fmt(a.reach)}</td>
+      <td class="num">${fmt(a.purchases)}</td>
+      <td class="num"><span class="pill ${roasCls}">${a.roas.toFixed(2)}</span></td>
+      <td class="num">${a.cpm.toFixed(2)}</td>`;
+    tbodyA.appendChild(tr);
+  });
+
+  // --- GA ---
+  if (DATA.ga) {
+    document.getElementById('tab-btn-ga').style.display = '';
+    const G = DATA.ga;
+    const T = G.totals || {};
+    document.getElementById('ga-sessions').textContent = fmt(T.sessions);
+    document.getElementById('ga-users').textContent = fmt(T.users);
+    document.getElementById('ga-users-sub').textContent =
+      `新訪客 ${fmt(T.new_users)}（${T.users ? Math.round((T.new_users||0)/T.users*100) : 0}%）`;
+    document.getElementById('ga-pv').textContent = fmt(T.pageviews);
+    document.getElementById('ga-conv').textContent = fmt(T.conversions);
+    document.getElementById('ga-conv-sub').textContent =
+      `GA 營收 ${money(T.purchase_revenue)}`;
+
+    // Daily chart
+    const gdaily = G.daily || [];
+    const glabels = gdaily.map(d => d.date);
+    window._charts.chartGaDaily = new Chart(document.getElementById('chartGaDaily'), {
+      type: 'line',
+      data: {
+        labels: glabels,
+        datasets: [
+          {
+            label: 'Sessions',
+            data: gdaily.map(d => d.sessions),
+            borderColor: '#38bdf8',
+            backgroundColor: 'rgba(56,189,248,0.15)',
+            fill: true, tension: 0.3,
+          },
+          {
+            label: 'Total Users',
+            data: gdaily.map(d => d.users),
+            borderColor: '#fbbf24',
+            backgroundColor: 'rgba(251,191,36,0.1)',
+            fill: true, tension: 0.3,
+          },
+        ],
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+      }
+    });
+
+    // Source doughnut
+    const gs = G.traffic_sources || [];
+    window._charts.chartGaSource = new Chart(document.getElementById('chartGaSource'), {
+      type: 'doughnut',
+      data: {
+        labels: gs.map(s => s.channel),
+        datasets: [{
+          data: gs.map(s => s.sessions),
+          backgroundColor: ['#38bdf8','#fbbf24','#4ade80','#f87171','#a78bfa','#fb923c','#22d3ee','#f472b6','#94a3b8','#818cf8']
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+    });
+
+    // Device pie
+    const gd = G.devices || [];
+    window._charts.chartGaDevice = new Chart(document.getElementById('chartGaDevice'), {
+      type: 'pie',
+      data: {
+        labels: gd.map(x => x.device),
+        datasets: [{
+          data: gd.map(x => x.sessions),
+          backgroundColor: ['#4ade80','#38bdf8','#fbbf24','#f87171']
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+    });
+
+    // Landing pages table
+    const lpBody = document.querySelector('#tblGaLanding tbody');
+    (G.landing_pages || []).forEach(lp => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${lp.path}</td>
+        <td class="num">${fmt(lp.sessions)}</td>
+        <td class="num">${fmt(lp.users)}</td>
+        <td class="num">${((lp.bounce_rate||0)*100).toFixed(1)}%</td>`;
+      lpBody.appendChild(tr);
+    });
+
+    // Source table
+    const srcBody = document.querySelector('#tblGaSource tbody');
+    gs.forEach(s => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${s.channel}</td>
+        <td class="num">${fmt(s.sessions)}</td>
+        <td class="num">${fmt(s.users)}</td>
+        <td class="num">${fmt(s.conversions)}</td>`;
+      srcBody.appendChild(tr);
+    });
+  }
+
+  // --- Daily raw table ---
+  const tbodyD = document.querySelector('#tblDaily tbody');
+  daily.forEach(d => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${d.date}</td>
+      <td class="num">${fmt(d.orders)}</td>
+      <td class="num">${fmt(d.items)}</td>
+      <td class="num">${money(d.gross_amount)}</td>
+      <td class="num">${money(d.discount)}</td>
+      <td class="num">${fmt(d.cancel_orders)}</td>
+      <td class="num">${fmt(d.return_orders)}</td>
+      <td class="num">${money(d.net_sales)}</td>`;
+    tbodyD.appendChild(tr);
+  });
+</script>
+</body>
+</html>

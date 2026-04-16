@@ -1,0 +1,103 @@
+name: Generate KOCSKIN Weekly Report
+
+on:
+  schedule:
+    # 每天跑一次 (UTC 02:10 = 台灣 10:10 AM)
+    - cron: '10 2 * * *'
+  workflow_dispatch: {}   # 手動觸發
+
+permissions:
+  contents: write   # 需要 push 回 repo
+  pages: write      # 部署 GitHub Pages
+  id-token: write   # GitHub Pages OIDC
+
+concurrency:
+  group: weekly-report
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    outputs:
+      did_publish: ${{ steps.run.outputs.did_publish }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          # 預設使用內建 GITHUB_TOKEN (已可 push); 若想改用 PAT, 改成 ${{ secrets.PAT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Setup Node (for staticrypt)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run generator
+        id: run
+        env:
+          SERVICE_ACCOUNT_JSON: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_JSON }}
+          REPORT_PASSWORD: ${{ secrets.REPORT_PASSWORD }}
+          DRIVE_FOLDER_NAME: ${{ vars.DRIVE_FOLDER_NAME || 'KOCSKIN_週報' }}
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+          FB_AD_ACCOUNT_ID: ${{ secrets.FB_AD_ACCOUNT_ID }}
+          GA4_PROPERTY_ID: ${{ secrets.GA4_PROPERTY_ID }}
+        run: |
+          set +e
+          python generate_report.py
+          rc=$?
+          echo "exit_code=$rc" >> "$GITHUB_OUTPUT"
+          if [ "$rc" = "0" ]; then
+            echo "did_publish=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          elif [ "$rc" = "2" ] || [ "$rc" = "3" ]; then
+            # 2: 缺檔 | 3: 沒有新檔
+            echo "did_publish=false" >> "$GITHUB_OUTPUT"
+            echo "Skipping publish (exit $rc)"
+            exit 0
+          else
+            echo "did_publish=false" >> "$GITHUB_OUTPUT"
+            exit $rc
+          fi
+
+      - name: Commit state + log + dist
+        if: steps.run.outputs.did_publish == 'true'
+        run: |
+          git config user.name "kocskin-report-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add state/history.json state/last_run.json logs/ dist/index.html || true
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore(report): auto-update $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            git push
+          fi
+
+      - name: Upload Pages artifact
+        if: steps.run.outputs.did_publish == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: generate
+    if: needs.generate.outputs.did_publish == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.pages.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: pages
+        uses: actions/deploy-pages@v4

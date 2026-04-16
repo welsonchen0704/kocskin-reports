@@ -1,9 +1,32 @@
-source/
+# Secrets & credentials
+*.json.key
+service_account*.json
+.env
+.env.*
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Local raw data (never commit source files)
+raw_data/
+downloads/
+*.xlsx
+*.csv
+!sample/*.xlsx
+!sample/*.csv
+
+# OS
 .DS_Store
 Thumbs.db
-*.swp
-*~
+
+# IDE
 .vscode/
 .idea/
+
+# Node (staticrypt)
 node_modules/
-npm-debug.log
+package-lock.json
