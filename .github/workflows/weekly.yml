@@ -2,14 +2,13 @@ name: Generate KOCSKIN Weekly Report
 
 on:
   schedule:
-    # 每天跑一次 (UTC 02:10 = 台灣 10:10 AM)
     - cron: '10 2 * * *'
-  workflow_dispatch: {}   # 手動觸發
+  workflow_dispatch: {}
 
 permissions:
-  contents: write   # 需要 push 回 repo
-  pages: write      # 部署 GitHub Pages
-  id-token: write   # GitHub Pages OIDC
+  contents: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: weekly-report
@@ -25,7 +24,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          # 預設使用內建 GITHUB_TOKEN (已可 push); 若想改用 PAT, 改成 ${{ secrets.PAT_TOKEN }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Python
@@ -62,7 +60,6 @@ jobs:
             echo "did_publish=true" >> "$GITHUB_OUTPUT"
             exit 0
           elif [ "$rc" = "2" ] || [ "$rc" = "3" ]; then
-            # 2: 缺檔 | 3: 沒有新檔
             echo "did_publish=false" >> "$GITHUB_OUTPUT"
             echo "Skipping publish (exit $rc)"
             exit 0
@@ -76,15 +73,14 @@ jobs:
         run: |
           git config user.name "kocskin-report-bot"
           git config user.email "actions@users.noreply.github.com"
+          git fetch origin main
+          git reset --soft origin/main
           git add state/history.json state/last_run.json logs/ dist/index.html || true
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            git fetch origin main
-          git reset --soft origin/main
-          git add state/history.json state/last_run.json logs/ dist/index.html || true
-          git commit -m "chore(report): auto-update $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          git push
+            git commit -m "chore(report): auto-update $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            git push
           fi
 
       - name: Upload Pages artifact
