@@ -776,11 +776,11 @@
           "廣告投遞": "active",
           "成果": 19,
           "花費金額 (TWD)": 9538.0,
-          "曝光次數": 44332,
+          "曝光次數": 44333,
           "觸及人數": 22455,
           "廣告組合名稱": "毛孔洗面乳組合",
           "購買 ROAS（廣告投資報酬率）": 2.445376,
-          "頻率": 1.97426,
+          "頻率": 1.974304,
           "購買次數": 19,
           "歸因設定": "點擊後 7 天",
           "_ad_id": "120237232639120630",
@@ -28749,23 +28749,319 @@
     {
       "run_date": "2026-04-16",
       "at": "2026-04-16T08:00:38+00:00"
+    },
+    {
+      "run_date": "2026-04-16",
+      "at": "2026-04-16T08:34:49+00:00"
     }
   ],
   "ga_snapshots": [
     {
       "run_date": "2026-04-16",
       "data": {
-        "daily": [],
-        "traffic_sources": [],
-        "devices": [],
-        "landing_pages": [],
+        "daily": [
+          {
+            "date": "2026-04-01",
+            "sessions": 1418,
+            "users": 2511,
+            "new_users": 344,
+            "pageviews": 15745
+          },
+          {
+            "date": "2026-04-02",
+            "sessions": 1337,
+            "users": 2402,
+            "new_users": 237,
+            "pageviews": 14561
+          },
+          {
+            "date": "2026-04-03",
+            "sessions": 1089,
+            "users": 2335,
+            "new_users": 266,
+            "pageviews": 10737
+          },
+          {
+            "date": "2026-04-04",
+            "sessions": 1270,
+            "users": 2539,
+            "new_users": 479,
+            "pageviews": 11668
+          },
+          {
+            "date": "2026-04-05",
+            "sessions": 2151,
+            "users": 3050,
+            "new_users": 524,
+            "pageviews": 25750
+          },
+          {
+            "date": "2026-04-06",
+            "sessions": 1171,
+            "users": 2466,
+            "new_users": 320,
+            "pageviews": 11526
+          },
+          {
+            "date": "2026-04-07",
+            "sessions": 1217,
+            "users": 2453,
+            "new_users": 321,
+            "pageviews": 11974
+          },
+          {
+            "date": "2026-04-08",
+            "sessions": 1311,
+            "users": 2559,
+            "new_users": 348,
+            "pageviews": 11875
+          },
+          {
+            "date": "2026-04-09",
+            "sessions": 1631,
+            "users": 2786,
+            "new_users": 444,
+            "pageviews": 15918
+          },
+          {
+            "date": "2026-04-10",
+            "sessions": 1415,
+            "users": 2632,
+            "new_users": 399,
+            "pageviews": 13389
+          },
+          {
+            "date": "2026-04-11",
+            "sessions": 1051,
+            "users": 2415,
+            "new_users": 289,
+            "pageviews": 9575
+          },
+          {
+            "date": "2026-04-12",
+            "sessions": 1293,
+            "users": 2608,
+            "new_users": 399,
+            "pageviews": 11521
+          },
+          {
+            "date": "2026-04-13",
+            "sessions": 1226,
+            "users": 2551,
+            "new_users": 388,
+            "pageviews": 9795
+          },
+          {
+            "date": "2026-04-14",
+            "sessions": 1217,
+            "users": 2516,
+            "new_users": 352,
+            "pageviews": 10771
+          },
+          {
+            "date": "2026-04-15",
+            "sessions": 1293,
+            "users": 2372,
+            "new_users": 430,
+            "pageviews": 11383
+          }
+        ],
+        "traffic_sources": [
+          {
+            "channel": "Paid Other",
+            "sessions": 4792,
+            "users": 3395,
+            "conversions": 14819
+          },
+          {
+            "channel": "Mobile Push Notifications",
+            "sessions": 4704,
+            "users": 893,
+            "conversions": 7790
+          },
+          {
+            "channel": "Paid Social",
+            "sessions": 4177,
+            "users": 2702,
+            "conversions": 11360
+          },
+          {
+            "channel": "Direct",
+            "sessions": 3598,
+            "users": 2100,
+            "conversions": 7759
+          },
+          {
+            "channel": "Organic Social",
+            "sessions": 730,
+            "users": 500,
+            "conversions": 1762
+          },
+          {
+            "channel": "Unassigned",
+            "sessions": 681,
+            "users": 2430,
+            "conversions": 1948
+          },
+          {
+            "channel": "Organic Search",
+            "sessions": 666,
+            "users": 392,
+            "conversions": 1754
+          },
+          {
+            "channel": "SMS",
+            "sessions": 433,
+            "users": 263,
+            "conversions": 1033
+          },
+          {
+            "channel": "Email",
+            "sessions": 318,
+            "users": 182,
+            "conversions": 611
+          },
+          {
+            "channel": "Referral",
+            "sessions": 36,
+            "users": 23,
+            "conversions": 57
+          },
+          {
+            "channel": "Paid Search",
+            "sessions": 12,
+            "users": 4,
+            "conversions": 14
+          },
+          {
+            "channel": "Organic Shopping",
+            "sessions": 3,
+            "users": 3,
+            "conversions": 6
+          },
+          {
+            "channel": "Display",
+            "sessions": 2,
+            "users": 1,
+            "conversions": 22
+          }
+        ],
+        "devices": [
+          {
+            "device": "mobile",
+            "sessions": 18723,
+            "users": 9894
+          },
+          {
+            "device": "desktop",
+            "sessions": 1016,
+            "users": 571
+          },
+          {
+            "device": "tablet",
+            "sessions": 210,
+            "users": 117
+          }
+        ],
+        "landing_pages": [
+          {
+            "path": "(not set)",
+            "sessions": 11514,
+            "users": 4305,
+            "bounce_rate": 0.2161
+          },
+          {
+            "path": "/",
+            "sessions": 536,
+            "users": 390,
+            "bounce_rate": 0.2556
+          },
+          {
+            "path": "/page/008",
+            "sessions": 313,
+            "users": 285,
+            "bounce_rate": 0.492
+          },
+          {
+            "path": "/v2/official",
+            "sessions": 228,
+            "users": 192,
+            "bounce_rate": 0.1886
+          },
+          {
+            "path": "/Errors/PageNotFoundContainer?errMsg=%E9%9A%B1%E8%B3%A3%E5%95%86%E5%93%81%E9%A0%81%E5%8F%83%E6%95%B8%E4%B8%8D%E6%AD%A3%E7%A2%BA",
+            "sessions": 50,
+            "users": 50,
+            "bounce_rate": 0.0
+          },
+          {
+            "path": "/V2/ShoppingCart/Index?shopId=40757",
+            "sessions": 44,
+            "users": 41,
+            "bounce_rate": 0.0227
+          },
+          {
+            "path": "/SalePage/Index/10165499",
+            "sessions": 33,
+            "users": 5,
+            "bounce_rate": 0.0
+          },
+          {
+            "path": "/SalePage/Index/11328598",
+            "sessions": 31,
+            "users": 23,
+            "bounce_rate": 0.0323
+          },
+          {
+            "path": "/Article/Detail/57943",
+            "sessions": 29,
+            "users": 29,
+            "bounce_rate": 0.0
+          },
+          {
+            "path": "/notFound",
+            "sessions": 26,
+            "users": 24,
+            "bounce_rate": 0.4231
+          },
+          {
+            "path": "/Errors/PageNotFoundContainer?errMsg=%E5%95%86%E5%93%81%E9%A0%81%E5%B7%B2%E9%97%9C%E9%96%89%E6%88%96%E4%B8%8D%E5%AD%98%E5%9C%A8",
+            "sessions": 24,
+            "users": 24,
+            "bounce_rate": 0.0
+          },
+          {
+            "path": "/v2/official/SalePageCategory/362970?sortMode=Curator",
+            "sessions": 24,
+            "users": 9,
+            "bounce_rate": 0.4167
+          },
+          {
+            "path": "/SalePage/Index/11572674?garefersrc=HotsaleInCategory",
+            "sessions": 18,
+            "users": 7,
+            "bounce_rate": 0.0
+          },
+          {
+            "path": "/v2/official?fr=lineshopping&fr2=06aa8892104e64f87c6bc345b4be907e7d7096e8f8e80fabde7910fd2a189f75",
+            "sessions": 18,
+            "users": 1,
+            "bounce_rate": 1.0
+          },
+          {
+            "path": "(not set)",
+            "sessions": 16,
+            "users": 106,
+            "bounce_rate": 0.4375
+          }
+        ],
         "totals": {
-          "sessions": 0,
-          "users": 0,
-          "new_users": 0,
-          "pageviews": 0,
-          "conversions": 0,
-          "purchase_revenue": 0.0
+          "sessions": 20059,
+          "users": 10545,
+          "new_users": 5540,
+          "pageviews": 196188,
+          "conversions": 48935,
+          "purchase_revenue": 1702871.000201
         }
       }
     }
