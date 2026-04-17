@@ -323,6 +323,27 @@
         </table>
       </div>
     </section>
+    <section>
+      <h2>最佳廣告 Top 10（依 ROAS）</h2>
+      <div class="grid-2">
+        <div class="chart-wrap"><canvas id="chartTopAdsRoas"></canvas></div>
+        <div class="scroll-y" style="max-height:340px">
+          <table id="tblTopAds">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>廣告名稱</th>
+                <th class="num">ROAS</th>
+                <th class="num">花費</th>
+                <th class="num">購買</th>
+                <th>狀態</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
   </div>
 
   <!-- Tab: GA -->
@@ -626,6 +647,45 @@
       <td class="num">${a.cpm.toFixed(2)}</td>`;
     tbodyA.appendChild(tr);
   });
+
+  // --- Top 10 Ads by ROAS ---
+  const topAds = DATA.top_ads_by_roas || [];
+  if (topAds.length) {
+    const taLabels = topAds.map(a => a.name.length > 25 ? a.name.slice(0, 23) + '…' : a.name);
+    window._charts.chartTopAdsRoas = new Chart(document.getElementById('chartTopAdsRoas'), {
+      type: 'bar',
+      data: {
+        labels: taLabels,
+        datasets: [{
+          label: 'ROAS',
+          data: topAds.map(a => a.roas),
+          backgroundColor: topAds.map(a => a.roas >= 3 ? '#00d4aa' : a.roas >= 1 ? '#38bdf8' : '#ff6b6b'),
+          borderRadius: 4,
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true, title: { display: true, text: 'ROAS' } } }
+      }
+    });
+
+    const tbodyTA = document.querySelector('#tblTopAds tbody');
+    topAds.forEach((a, i) => {
+      const tr = document.createElement('tr');
+      const roasCls = a.roas >= 3 ? 'ok' : a.roas >= 1 ? '' : 'warn';
+      const statusCls = a.status === 'active' ? 'ok' : 'warn';
+      const statusText = a.status === 'active' ? '投放中' : '已暫停';
+      tr.innerHTML = `<td>${i+1}</td>
+        <td title="${a.name}">${a.name.length > 30 ? a.name.slice(0, 28) + '…' : a.name}</td>
+        <td class="num"><span class="pill ${roasCls}">${a.roas.toFixed(2)}</span></td>
+        <td class="num">${money(a.spend)}</td>
+        <td class="num">${fmt(a.purchases)}</td>
+        <td><span class="pill ${statusCls}">${statusText}</span></td>`;
+      tbodyTA.appendChild(tr);
+    });
+  }
 
   // --- GA ---
   if (DATA.ga) {
