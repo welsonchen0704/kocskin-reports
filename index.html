@@ -17,7 +17,7 @@
                 margin-top: 20px;
                 margin-bottom: 20px;
                 border: 0;
-                border-top: 1px solid #eee;
+                border-top: 1px solid #1c2340;
             }
 
             .staticrypt-page {
@@ -30,31 +30,35 @@
             .staticrypt-form {
                 position: relative;
                 z-index: 1;
-                background: #ffffff;
-                max-width: 360px;
+                background: #0d1229;
+                max-width: 380px;
                 margin: 0 auto 100px;
-                padding: 45px;
+                padding: 48px;
                 text-align: center;
-                box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+                box-shadow: 0 4px 30px rgba(0, 212, 170, 0.08), 0 0 60px rgba(0, 0, 0, 0.4);
+                border-radius: 16px;
+                border: 1px solid #1c2340;
             }
 
             .staticrypt-form input[type="password"],
             input[type="text"] {
                 background: inherit;
                 border: 0;
-                box-sizing: border-box; /* This ensures padding is included in the total width */
+                box-sizing: border-box;
                 font-size: 14px;
                 outline: 0;
-                padding: 15px 30px 15px 15px; /* Adjust the padding to ensure there is space for the icon */
+                padding: 15px 30px 15px 15px;
                 width: 100%;
+                color: #e4e8f1;
             }
 
             .staticrypt-password-container {
                 position: relative;
                 outline: 0;
-                background: #f2f2f2;
+                background: #141a36;
                 width: 100%;
-                border: 0;
+                border: 1px solid #1c2340;
+                border-radius: 8px;
                 margin: 0 0 15px;
                 box-sizing: border-box;
             }
@@ -62,32 +66,37 @@
             .staticrypt-toggle-password-visibility {
                 cursor: pointer;
                 height: 20px;
-                opacity: 60%;
+                opacity: 40%;
                 padding: 13px;
                 position: absolute;
                 right: 0;
                 top: 50%;
                 transform: translateY(-50%);
                 width: 20px;
+                filter: invert(1);
             }
 
             .staticrypt-form .staticrypt-decrypt-button {
                 text-transform: uppercase;
                 outline: 0;
-                background: #8c6b22;
+                background: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
                 width: 100%;
                 border: 0;
                 padding: 15px;
-                color: #ffffff;
+                color: #070b1a;
                 font-size: 14px;
+                font-weight: 600;
                 cursor: pointer;
+                border-radius: 8px;
+                letter-spacing: 1px;
+                transition: all 0.2s;
             }
 
             .staticrypt-form .staticrypt-decrypt-button:hover,
             .staticrypt-form .staticrypt-decrypt-button:active,
             .staticrypt-form .staticrypt-decrypt-button:focus {
-                background: #8c6b22;
-                filter: brightness(92%);
+                background: linear-gradient(135deg, #00e6b8 0%, #00d4aa 100%);
+                box-shadow: 0 4px 16px rgba(0, 212, 170, 0.3);
             }
 
             .staticrypt-html {
@@ -102,8 +111,8 @@
             .staticrypt-content {
                 height: 100%;
                 margin-bottom: 1em;
-                background: #f7f2e6;
-                font-family: "Arial", sans-serif;
+                background: #070b1a;
+                font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", sans-serif;
                 -webkit-font-smoothing: antialiased;
                 -moz-osx-font-smoothing: grayscale;
             }
@@ -115,6 +124,12 @@
 
             .staticrypt-title {
                 font-size: 1.5em;
+                color: #ffffff;
+                font-weight: 700;
+            }
+
+            .staticrypt-instructions p {
+                color: #7a84a0;
             }
 
             label.staticrypt-remember {
@@ -144,8 +159,8 @@
                 width: 2rem;
                 height: 2rem;
                 vertical-align: text-bottom;
-                border: 0.25em solid gray;
-                border-right-color: transparent;
+                border: 0.25em solid #1c2340;
+                border-right-color: #00d4aa;
                 border-radius: 50%;
                 -webkit-animation: spinner-border 0.75s linear infinite;
                 animation: spinner-border 0.75s linear infinite;
