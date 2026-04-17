@@ -516,6 +516,8 @@ def build_dashboard_payload(history: Dict[str, Any]) -> Dict[str, Any]:
             "total_cancel_amount": int(total_cancel_amount),
             "cancel_rate": round(cancel_rate, 2),
             "return_rate": round(return_rate, 2),
+            "avg_daily_orders": round(total_orders / period_days, 1) if period_days else 0,
+            "avg_daily_net": int(round(total_net / period_days)) if period_days else 0,
         },
         "kpis_ad": {
             "total_spend": int(round(total_spend)),

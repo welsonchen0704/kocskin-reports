@@ -194,6 +194,16 @@
       <div class="kpi-value" id="kpi-items">0</div>
       <div class="kpi-sub">累計商品銷售數量</div>
     </div>
+    <div class="kpi">
+      <div class="kpi-label">日均訂單</div>
+      <div class="kpi-value" id="kpi-daily-orders">0</div>
+      <div class="kpi-sub">平均每日訂單筆數</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">日均營收</div>
+      <div class="kpi-value" id="kpi-daily-net">$0</div>
+      <div class="kpi-sub">平均每日淨銷售額</div>
+    </div>
   </div>
 
   <!-- === 廣告資料 === -->
@@ -238,6 +248,16 @@
       <div class="kpi-label">Meta 歸因 / ECOM 實際</div>
       <div class="kpi-value"><span id="kpi-attribution">0</span>%</div>
       <div class="kpi-sub" id="kpi-attribution-sub">-</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">CPA</div>
+      <div class="kpi-value" id="kpi-cpa">$0</div>
+      <div class="kpi-sub">每次購買成本</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Active 廣告支數</div>
+      <div class="kpi-value" id="kpi-active-count">0</div>
+      <div class="kpi-sub" id="kpi-active-count-sub">目前投放中</div>
     </div>
   </div>
 
@@ -492,6 +512,8 @@
   document.getElementById('kpi-cancel').textContent = pct(S.cancel_rate);
   document.getElementById('kpi-return').textContent = pct(S.return_rate);
   document.getElementById('kpi-items').textContent = fmt(S.total_items);
+  document.getElementById('kpi-daily-orders').textContent = (S.avg_daily_orders || 0).toFixed(1);
+  document.getElementById('kpi-daily-net').textContent = money(S.avg_daily_net);
 
   // --- Ad KPIs ---
   const A = DATA.kpis_ad;
@@ -515,6 +537,10 @@
   document.getElementById('kpi-attribution').textContent = (A.meta_attribution_rate || 0).toFixed(0);
   document.getElementById('kpi-attribution-sub').textContent =
     `${fmt(A.meta_revenue)} / ${fmt(S.total_gross)}`;
+  document.getElementById('kpi-cpa').textContent = money(A.cpa);
+  document.getElementById('kpi-active-count').textContent = fmt(A.active.count);
+  document.getElementById('kpi-active-count-sub').textContent =
+    `全部 ${A.active.count + A.inactive.count} 支`;
 
   // --- Tabs ---
   document.querySelectorAll('.tab').forEach(t => {
