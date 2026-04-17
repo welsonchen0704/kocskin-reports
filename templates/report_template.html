@@ -324,6 +324,27 @@
       </div>
     </section>
     <section>
+      <h2>花費最多廣告 Top 10</h2>
+      <div class="grid-2">
+        <div class="chart-wrap"><canvas id="chartTopAdsSpend"></canvas></div>
+        <div class="scroll-y" style="max-height:340px">
+          <table id="tblTopAdsSpend">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>廣告名稱</th>
+                <th class="num">花費</th>
+                <th class="num">ROAS</th>
+                <th class="num">購買</th>
+                <th>狀態</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+    <section>
       <h2>最佳廣告 Top 10（依 ROAS）</h2>
       <div class="grid-2">
         <div class="chart-wrap"><canvas id="chartTopAdsRoas"></canvas></div>
@@ -647,6 +668,45 @@
       <td class="num">${a.cpm.toFixed(2)}</td>`;
     tbodyA.appendChild(tr);
   });
+
+  // --- Top 10 Ads by Spend ---
+  const topSpend = DATA.top_ads_by_spend || [];
+  if (topSpend.length) {
+    const tsLabels = topSpend.map(a => a.name.length > 25 ? a.name.slice(0, 23) + '…' : a.name);
+    window._charts.chartTopAdsSpend = new Chart(document.getElementById('chartTopAdsSpend'), {
+      type: 'bar',
+      data: {
+        labels: tsLabels,
+        datasets: [{
+          label: '花費 (TWD)',
+          data: topSpend.map(a => a.spend),
+          backgroundColor: topSpend.map(a => a.roas >= 3 ? '#00d4aa' : a.roas >= 1 ? '#38bdf8' : '#ff6b6b'),
+          borderRadius: 4,
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true, title: { display: true, text: '花費 (TWD)' } } }
+      }
+    });
+
+    const tbodyTS = document.querySelector('#tblTopAdsSpend tbody');
+    topSpend.forEach((a, i) => {
+      const tr = document.createElement('tr');
+      const roasCls = a.roas >= 3 ? 'ok' : a.roas >= 1 ? '' : 'warn';
+      const statusCls = a.status === 'active' ? 'ok' : 'warn';
+      const statusText = a.status === 'active' ? '投放中' : '已暫停';
+      tr.innerHTML = `<td>${i+1}</td>
+        <td title="${a.name}">${a.name.length > 30 ? a.name.slice(0, 28) + '…' : a.name}</td>
+        <td class="num">${money(a.spend)}</td>
+        <td class="num"><span class="pill ${roasCls}">${a.roas.toFixed(2)}</span></td>
+        <td class="num">${fmt(a.purchases)}</td>
+        <td><span class="pill ${statusCls}">${statusText}</span></td>`;
+      tbodyTS.appendChild(tr);
+    });
+  }
 
   // --- Top 10 Ads by ROAS ---
   const topAds = DATA.top_ads_by_roas || [];

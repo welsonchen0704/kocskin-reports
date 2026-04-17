@@ -430,6 +430,25 @@ def build_dashboard_payload(history: Dict[str, Any]) -> Dict[str, Any]:
     top_ads_by_roas.sort(key=lambda x: x["roas"], reverse=True)
     top_ads_by_roas = top_ads_by_roas[:10]
 
+    # ----- Top 10 individual ads by Spend -----
+    top_ads_by_spend = []
+    for a in ads_latest:
+        spend = _num(a.get("花費金額 (TWD)"))
+        if spend <= 0:
+            continue
+        roas = _num(a.get("購買 ROAS（廣告投資報酬率）"))
+        top_ads_by_spend.append({
+            "name": str(a.get("廣告名稱") or "未命名"),
+            "group": str(a.get("廣告組合名稱") or "未分組"),
+            "spend": round(spend),
+            "purchases": int(_num(a.get("購買次數"))),
+            "roas": round(roas, 2),
+            "impressions": int(_num(a.get("曝光次數"))),
+            "status": a.get("廣告投遞", "unknown"),
+        })
+    top_ads_by_spend.sort(key=lambda x: x["spend"], reverse=True)
+    top_ads_by_spend = top_ads_by_spend[:10]
+
     # ----- Ad totals -----
     total_spend = sum(_num(a.get("花費金額 (TWD)")) for a in ads_latest)
     total_purchases = sum(_num(a.get("購買次數")) for a in ads_latest)
@@ -518,6 +537,7 @@ def build_dashboard_payload(history: Dict[str, Any]) -> Dict[str, Any]:
         "top_products": top_products,
         "ad_groups": ad_group_rows,
         "top_ads_by_roas": top_ads_by_roas,
+        "top_ads_by_spend": top_ads_by_spend,
         "ga": ga_block,
         "runs_count": len(history.get("runs", [])),
     }
