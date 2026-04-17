@@ -57261,6 +57261,10 @@
     {
       "run_date": "2026-04-17",
       "at": "2026-04-17T05:24:31+00:00"
+    },
+    {
+      "run_date": "2026-04-17",
+      "at": "2026-04-17T05:27:31+00:00"
     }
   ],
   "ga_snapshots": [
@@ -57607,31 +57611,31 @@
           },
           {
             "date": "2026-04-05",
-            "sessions": 2150,
-            "users": 3049,
+            "sessions": 2151,
+            "users": 3050,
             "new_users": 524,
-            "pageviews": 25743
+            "pageviews": 25750
           },
           {
             "date": "2026-04-06",
             "sessions": 1171,
             "users": 2466,
             "new_users": 320,
-            "pageviews": 11521
+            "pageviews": 11526
           },
           {
             "date": "2026-04-07",
-            "sessions": 1216,
-            "users": 2448,
+            "sessions": 1217,
+            "users": 2453,
             "new_users": 321,
-            "pageviews": 11842
+            "pageviews": 11974
           },
           {
             "date": "2026-04-08",
-            "sessions": 547,
-            "users": 768,
-            "new_users": 316,
-            "pageviews": 1423
+            "sessions": 1311,
+            "users": 2559,
+            "new_users": 348,
+            "pageviews": 11875
           },
           {
             "date": "2026-04-09",
@@ -57693,63 +57697,63 @@
         "traffic_sources": [
           {
             "channel": "Paid Other",
-            "sessions": 5057,
-            "users": 3647,
-            "conversions": 15654
+            "sessions": 5143,
+            "users": 3681,
+            "conversions": 16088
           },
           {
             "channel": "Mobile Push Notifications",
-            "sessions": 4595,
-            "users": 887,
-            "conversions": 7711
+            "sessions": 4931,
+            "users": 919,
+            "conversions": 8244
           },
           {
             "channel": "Paid Social",
-            "sessions": 4418,
-            "users": 2895,
-            "conversions": 12075
+            "sessions": 4529,
+            "users": 2908,
+            "conversions": 12412
           },
           {
             "channel": "Direct",
-            "sessions": 3834,
-            "users": 2272,
-            "conversions": 8049
+            "sessions": 3989,
+            "users": 2312,
+            "conversions": 8389
           },
           {
             "channel": "Organic Social",
-            "sessions": 826,
-            "users": 551,
-            "conversions": 1957
-          },
-          {
-            "channel": "Organic Search",
-            "sessions": 696,
-            "users": 419,
-            "conversions": 1863
+            "sessions": 838,
+            "users": 553,
+            "conversions": 1997
           },
           {
             "channel": "Unassigned",
-            "sessions": 689,
-            "users": 2462,
-            "conversions": 2011
+            "sessions": 724,
+            "users": 2477,
+            "conversions": 2094
+          },
+          {
+            "channel": "Organic Search",
+            "sessions": 716,
+            "users": 423,
+            "conversions": 1903
           },
           {
             "channel": "SMS",
-            "sessions": 436,
+            "sessions": 444,
             "users": 265,
-            "conversions": 1038
+            "conversions": 1051
           },
           {
             "channel": "Email",
-            "sessions": 316,
-            "users": 181,
-            "conversions": 610
+            "sessions": 337,
+            "users": 185,
+            "conversions": 663
           },
           {
             "channel": "Referral",
-            "sessions": 37,
+            "sessions": 39,
             "users": 25,
-            "conversions": 59
+            "conversions": 61
           },
           {
             "channel": "Paid Search",
@@ -57880,12 +57884,12 @@
           }
         ],
         "totals": {
-          "sessions": 21066,
-          "users": 11189,
-          "new_users": 6054,
-          "pageviews": 199160,
-          "conversions": 51069,
-          "purchase_revenue": 1773543.0000960003
+          "sessions": 21805,
+          "users": 11261,
+          "new_users": 6086,
+          "pageviews": 209756,
+          "conversions": 52944,
+          "purchase_revenue": 1830081.0001239998
         }
       }
     }
