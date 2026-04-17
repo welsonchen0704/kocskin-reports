@@ -29689,11 +29689,11 @@
           "廣告投遞": "active",
           "成果": 9,
           "花費金額 (TWD)": 4168.0,
-          "曝光次數": 23399,
+          "曝光次數": 23400,
           "觸及人數": 15371,
           "廣告組合名稱": "毛孔洗面乳組合",
           "購買 ROAS（廣告投資報酬率）": 2.823896,
-          "頻率": 1.522282,
+          "頻率": 1.522347,
           "購買次數": 9,
           "歸因設定": "點擊後 7 天",
           "_ad_id": "120241371066270630",
@@ -57265,6 +57265,10 @@
     {
       "run_date": "2026-04-17",
       "at": "2026-04-17T05:27:31+00:00"
+    },
+    {
+      "run_date": "2026-04-17",
+      "at": "2026-04-17T05:32:57+00:00"
     }
   ],
   "ga_snapshots": [
@@ -57697,63 +57701,63 @@
         "traffic_sources": [
           {
             "channel": "Paid Other",
-            "sessions": 5143,
-            "users": 3681,
-            "conversions": 16088
+            "sessions": 5057,
+            "users": 3647,
+            "conversions": 15654
           },
           {
             "channel": "Mobile Push Notifications",
-            "sessions": 4931,
-            "users": 919,
-            "conversions": 8244
+            "sessions": 4595,
+            "users": 887,
+            "conversions": 7711
           },
           {
             "channel": "Paid Social",
-            "sessions": 4529,
-            "users": 2908,
-            "conversions": 12412
+            "sessions": 4418,
+            "users": 2895,
+            "conversions": 12075
           },
           {
             "channel": "Direct",
-            "sessions": 3989,
-            "users": 2312,
-            "conversions": 8389
+            "sessions": 3834,
+            "users": 2272,
+            "conversions": 8049
           },
           {
             "channel": "Organic Social",
-            "sessions": 838,
-            "users": 553,
-            "conversions": 1997
-          },
-          {
-            "channel": "Unassigned",
-            "sessions": 724,
-            "users": 2477,
-            "conversions": 2094
+            "sessions": 826,
+            "users": 551,
+            "conversions": 1957
           },
           {
             "channel": "Organic Search",
-            "sessions": 716,
-            "users": 423,
-            "conversions": 1903
+            "sessions": 696,
+            "users": 419,
+            "conversions": 1863
+          },
+          {
+            "channel": "Unassigned",
+            "sessions": 689,
+            "users": 2462,
+            "conversions": 2011
           },
           {
             "channel": "SMS",
-            "sessions": 444,
+            "sessions": 436,
             "users": 265,
-            "conversions": 1051
+            "conversions": 1038
           },
           {
             "channel": "Email",
-            "sessions": 337,
-            "users": 185,
-            "conversions": 663
+            "sessions": 316,
+            "users": 181,
+            "conversions": 610
           },
           {
             "channel": "Referral",
-            "sessions": 39,
+            "sessions": 37,
             "users": 25,
-            "conversions": 61
+            "conversions": 59
           },
           {
             "channel": "Paid Search",
@@ -57777,17 +57781,17 @@
         "devices": [
           {
             "device": "mobile",
-            "sessions": 19611,
-            "users": 10469
+            "sessions": 20312,
+            "users": 10541
           },
           {
             "device": "desktop",
-            "sessions": 1094,
-            "users": 612
+            "sessions": 1113,
+            "users": 614
           },
           {
             "device": "tablet",
-            "sessions": 213,
+            "sessions": 220,
             "users": 122
           }
         ],
@@ -57889,7 +57893,7 @@
           "new_users": 6086,
           "pageviews": 209756,
           "conversions": 52944,
-          "purchase_revenue": 1830081.0001239998
+          "purchase_revenue": 1830081.0001240002
         }
       }
     }
