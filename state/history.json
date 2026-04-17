@@ -57253,6 +57253,10 @@
     {
       "run_date": "2026-04-17",
       "at": "2026-04-17T05:10:04+00:00"
+    },
+    {
+      "run_date": "2026-04-17",
+      "at": "2026-04-17T05:15:40+00:00"
     }
   ],
   "ga_snapshots": [
@@ -57669,17 +57673,17 @@
           },
           {
             "date": "2026-04-15",
-            "sessions": 1295,
+            "sessions": 1278,
             "users": 2375,
             "new_users": 430,
             "pageviews": 11385
           },
           {
             "date": "2026-04-16",
-            "sessions": 1579,
+            "sessions": 1586,
             "users": 2841,
-            "new_users": 506,
-            "pageviews": 12781
+            "new_users": 546,
+            "pageviews": 13566
           }
         ],
         "traffic_sources": [
@@ -57765,7 +57769,7 @@
         "devices": [
           {
             "device": "mobile",
-            "sessions": 20151,
+            "sessions": 20312,
             "users": 10541
           },
           {
@@ -57872,11 +57876,11 @@
           }
         ],
         "totals": {
-          "sessions": 21628,
+          "sessions": 21805,
           "users": 11261,
-          "new_users": 6046,
-          "pageviews": 208971,
-          "conversions": 52628,
+          "new_users": 6086,
+          "pageviews": 209756,
+          "conversions": 52944,
           "purchase_revenue": 1830081.000124
         }
       }
