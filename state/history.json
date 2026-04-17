@@ -57269,6 +57269,10 @@
     {
       "run_date": "2026-04-17",
       "at": "2026-04-17T05:32:57+00:00"
+    },
+    {
+      "run_date": "2026-04-17",
+      "at": "2026-04-17T05:38:17+00:00"
     }
   ],
   "ga_snapshots": [
@@ -57701,63 +57705,63 @@
         "traffic_sources": [
           {
             "channel": "Paid Other",
-            "sessions": 5057,
-            "users": 3647,
-            "conversions": 15654
+            "sessions": 5143,
+            "users": 3681,
+            "conversions": 16088
           },
           {
             "channel": "Mobile Push Notifications",
-            "sessions": 4595,
-            "users": 887,
-            "conversions": 7711
+            "sessions": 4931,
+            "users": 919,
+            "conversions": 8244
           },
           {
             "channel": "Paid Social",
-            "sessions": 4418,
-            "users": 2895,
-            "conversions": 12075
+            "sessions": 4529,
+            "users": 2908,
+            "conversions": 12412
           },
           {
             "channel": "Direct",
-            "sessions": 3834,
-            "users": 2272,
-            "conversions": 8049
+            "sessions": 3989,
+            "users": 2312,
+            "conversions": 8389
           },
           {
             "channel": "Organic Social",
-            "sessions": 826,
-            "users": 551,
-            "conversions": 1957
-          },
-          {
-            "channel": "Organic Search",
-            "sessions": 696,
-            "users": 419,
-            "conversions": 1863
+            "sessions": 838,
+            "users": 553,
+            "conversions": 1997
           },
           {
             "channel": "Unassigned",
-            "sessions": 689,
-            "users": 2462,
-            "conversions": 2011
+            "sessions": 724,
+            "users": 2477,
+            "conversions": 2094
+          },
+          {
+            "channel": "Organic Search",
+            "sessions": 716,
+            "users": 423,
+            "conversions": 1903
           },
           {
             "channel": "SMS",
-            "sessions": 436,
+            "sessions": 444,
             "users": 265,
-            "conversions": 1038
+            "conversions": 1051
           },
           {
             "channel": "Email",
-            "sessions": 316,
-            "users": 181,
-            "conversions": 610
+            "sessions": 337,
+            "users": 185,
+            "conversions": 663
           },
           {
             "channel": "Referral",
-            "sessions": 37,
+            "sessions": 39,
             "users": 25,
-            "conversions": 59
+            "conversions": 61
           },
           {
             "channel": "Paid Search",
@@ -57798,21 +57802,21 @@
         "landing_pages": [
           {
             "path": "(not set)",
-            "sessions": 11558,
-            "users": 4337,
-            "bounce_rate": 0.2206
+            "sessions": 12263,
+            "users": 4396,
+            "bounce_rate": 0.2172
           },
           {
             "path": "/",
-            "sessions": 570,
-            "users": 414,
-            "bounce_rate": 0.2561
+            "sessions": 574,
+            "users": 418,
+            "bounce_rate": 0.2544
           },
           {
             "path": "/page/008",
-            "sessions": 440,
-            "users": 379,
-            "bounce_rate": 0.5091
+            "sessions": 441,
+            "users": 380,
+            "bounce_rate": 0.5079
           },
           {
             "path": "/v2/official",
@@ -57828,9 +57832,9 @@
           },
           {
             "path": "/V2/ShoppingCart/Index?shopId=40757",
-            "sessions": 53,
-            "users": 50,
-            "bounce_rate": 0.0189
+            "sessions": 55,
+            "users": 52,
+            "bounce_rate": 0.0182
           },
           {
             "path": "/Errors/PageNotFoundContainer?errMsg=%E9%9A%B1%E8%B3%A3%E5%95%86%E5%93%81%E9%A0%81%E5%8F%83%E6%95%B8%E4%B8%8D%E6%AD%A3%E7%A2%BA",
@@ -57870,9 +57874,9 @@
           },
           {
             "path": "/v2/official/SalePageCategory/362970?sortMode=Curator",
-            "sessions": 25,
+            "sessions": 26,
             "users": 10,
-            "bounce_rate": 0.4
+            "bounce_rate": 0.3846
           },
           {
             "path": "/v2/official?fr=lineshopping&fr2=06aa8892104e64f87c6bc345b4be907e7d7096e8f8e80fabde7910fd2a189f75",
@@ -57893,7 +57897,7 @@
           "new_users": 6086,
           "pageviews": 209756,
           "conversions": 52944,
-          "purchase_revenue": 1830081.0001240002
+          "purchase_revenue": 1830081.0001239998
         }
       }
     }
