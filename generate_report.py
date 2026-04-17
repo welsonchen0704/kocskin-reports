@@ -524,12 +524,18 @@ def encrypt_with_staticrypt(html: str, password: str, out_path: Path) -> None:
         src = Path(td) / "index.html"
         src.write_text(html, encoding="utf-8")
         out_path.parent.mkdir(parents=True, exist_ok=True)
+        template_path = Path(__file__).parent / "templates" / "password_template.html"
         cmd = [
             "npx", "--yes", "staticrypt",
             str(src),
             "-p", password,
             "--short",
             "-d", str(out_path.parent),
+            "-t", str(template_path),
+            "--template-title", "KOCSKIN Reports",
+            "--template-instructions", "請輸入內部密碼查看報表",
+            "--template-placeholder", "密碼",
+            "--template-button", "查看報表",
         ]
         logger.info("Running staticrypt encryption…")
         res = subprocess.run(cmd, capture_output=True, text=True)
