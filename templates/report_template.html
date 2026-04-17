@@ -8,17 +8,17 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
   :root {
-    --bg: #070b1a;
-    --panel: #0d1229;
-    --panel-2: #141a36;
-    --text: #e4e8f1;
-    --muted: #7a84a0;
-    --accent: #00d4aa;
-    --accent-2: #38bdf8;
-    --ok: #00d4aa;
-    --warn: #ff6b6b;
-    --border: #1c2340;
-    --glow: rgba(0, 212, 170, 0.08);
+    --bg: #0f1623;
+    --panel: #171f30;
+    --panel-2: #1e2840;
+    --text: #edf0f7;
+    --muted: #8b95b0;
+    --accent: #6ee7b7;
+    --accent-2: #7dd3fc;
+    --ok: #6ee7b7;
+    --warn: #fca5a5;
+    --border: #263354;
+    --glow: rgba(110, 231, 183, 0.06);
   }
   * { box-sizing: border-box; }
   body {
@@ -30,7 +30,7 @@
   }
   header {
     padding: 28px 32px;
-    background: linear-gradient(135deg, #0d1229 0%, #070b1a 100%);
+    background: linear-gradient(135deg, #171f30 0%, #0f1623 100%);
     border-bottom: 1px solid var(--border);
     display: flex;
     justify-content: space-between;
@@ -57,8 +57,8 @@
     transition: box-shadow 0.2s, border-color 0.2s;
   }
   .kpi:hover {
-    border-color: rgba(0, 212, 170, 0.25);
-    box-shadow: 0 4px 20px rgba(0, 212, 170, 0.12);
+    border-color: rgba(110, 231, 183, 0.25);
+    box-shadow: 0 4px 20px rgba(110, 231, 183, 0.1);
   }
   .kpi-label { color: var(--muted); font-size: 12px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
   .kpi-value { font-size: 28px; font-weight: 700; color: #fff; }
@@ -105,12 +105,12 @@
     padding: 3px 10px;
     font-size: 11px;
     border-radius: 10px;
-    background: rgba(0, 212, 170, 0.12);
+    background: rgba(110, 231, 183, 0.1);
     color: var(--accent);
     font-weight: 500;
   }
-  .pill.warn { background: rgba(255, 107, 107, 0.12); color: var(--warn); }
-  .pill.ok { background: rgba(0, 212, 170, 0.12); color: var(--ok); }
+  .pill.warn { background: rgba(252, 165, 165, 0.1); color: var(--warn); }
+  .pill.ok { background: rgba(110, 231, 183, 0.1); color: var(--ok); }
 
   .tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
   .tab {
@@ -124,8 +124,8 @@
     border-radius: 8px;
     transition: all 0.2s;
   }
-  .tab:hover { color: var(--text); border-color: rgba(0, 212, 170, 0.3); background: var(--panel-2); }
-  .tab.active { color: var(--accent); border-color: var(--accent); background: rgba(0, 212, 170, 0.08); box-shadow: 0 0 12px rgba(0, 212, 170, 0.15); }
+  .tab:hover { color: var(--text); border-color: rgba(110, 231, 183, 0.3); background: var(--panel-2); }
+  .tab.active { color: var(--accent); border-color: var(--accent); background: rgba(110, 231, 183, 0.08); box-shadow: 0 0 12px rgba(110, 231, 183, 0.12); }
   .tab-panel { display: none; }
   .tab-panel.active { display: block; }
 
@@ -583,8 +583,8 @@
     });
   });
 
-  Chart.defaults.color = '#7a84a0';
-  Chart.defaults.borderColor = '#1c2340';
+  Chart.defaults.color = '#8b95b0';
+  Chart.defaults.borderColor = '#263354';
   Chart.defaults.font.family = '-apple-system, PingFang TC, Microsoft JhengHei, sans-serif';
   window._charts = {};
 
@@ -600,8 +600,8 @@
           type: 'line',
           label: '訂單筆數',
           data: daily.map(d => d.orders),
-          borderColor: '#38bdf8',
-          backgroundColor: '#38bdf8',
+          borderColor: '#7dd3fc',
+          backgroundColor: '#7dd3fc',
           tension: 0.3,
           yAxisID: 'y2',
         },
@@ -609,7 +609,7 @@
           type: 'bar',
           label: '淨銷售額',
           data: daily.map(d => d.net_sales),
-          backgroundColor: 'rgba(0, 212, 170, 0.5)',
+          backgroundColor: 'rgba(110, 231, 183, 0.45)',
           yAxisID: 'y1',
         },
       ]
@@ -629,8 +629,8 @@
     data: {
       labels,
       datasets: [
-        { label: '取消單', data: daily.map(d => d.cancel_orders), backgroundColor: '#ff6b6b' },
-        { label: '退貨單', data: daily.map(d => d.return_orders), backgroundColor: '#ffa94d' },
+        { label: '取消單', data: daily.map(d => d.cancel_orders), backgroundColor: '#fca5a5' },
+        { label: '退貨單', data: daily.map(d => d.return_orders), backgroundColor: '#fdba74' },
       ]
     },
     options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: false }, y: { stacked: false } } }
@@ -643,8 +643,8 @@
       datasets: [{
         label: '折扣金額',
         data: daily.map(d => d.discount),
-        borderColor: '#818cf8',
-        backgroundColor: 'rgba(129,140,248,0.15)',
+        borderColor: '#a5b4fc',
+        backgroundColor: 'rgba(165,180,252,0.15)',
         fill: true,
         tension: 0.3,
       }]
@@ -661,7 +661,7 @@
       datasets: [{
         label: '銷售數量',
         data: tp.map(p => p.qty),
-        backgroundColor: 'rgba(0, 212, 170, 0.65)',
+        backgroundColor: 'rgba(110, 231, 183, 0.6)',
       }]
     },
     options: {
@@ -691,7 +691,7 @@
       labels: adLabels,
       datasets: [{
         data: ag.map(a => a.spend),
-        backgroundColor: ['#00d4aa','#38bdf8','#818cf8','#ffa94d','#ff6b6b','#f472b6','#22d3ee','#a78bfa']
+        backgroundColor: ['#6ee7b7','#7dd3fc','#a5b4fc','#fdba74','#fca5a5','#f9a8d4','#67e8f9','#c4b5fd']
       }]
     },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
@@ -704,7 +704,7 @@
       datasets: [{
         label: 'ROAS',
         data: ag.map(a => a.roas),
-        backgroundColor: ag.map(a => a.roas >= 3 ? '#00d4aa' : a.roas >= 1 ? '#38bdf8' : '#ff6b6b')
+        backgroundColor: ag.map(a => a.roas >= 3 ? '#6ee7b7' : a.roas >= 1 ? '#7dd3fc' : '#fca5a5')
       }]
     },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
@@ -735,7 +735,7 @@
         datasets: [{
           label: '花費 (TWD)',
           data: topSpend.map(a => a.spend),
-          backgroundColor: topSpend.map(a => a.roas >= 3 ? '#00d4aa' : a.roas >= 1 ? '#38bdf8' : '#ff6b6b'),
+          backgroundColor: topSpend.map(a => a.roas >= 3 ? '#6ee7b7' : a.roas >= 1 ? '#7dd3fc' : '#fca5a5'),
           borderRadius: 4,
         }]
       },
@@ -774,7 +774,7 @@
         datasets: [{
           label: 'ROAS',
           data: topAds.map(a => a.roas),
-          backgroundColor: topAds.map(a => a.roas >= 3 ? '#00d4aa' : a.roas >= 1 ? '#38bdf8' : '#ff6b6b'),
+          backgroundColor: topAds.map(a => a.roas >= 3 ? '#6ee7b7' : a.roas >= 1 ? '#7dd3fc' : '#fca5a5'),
           borderRadius: 4,
         }]
       },
@@ -827,15 +827,15 @@
           {
             label: 'Sessions',
             data: gdaily.map(d => d.sessions),
-            borderColor: '#00d4aa',
-            backgroundColor: 'rgba(0, 212, 170, 0.12)',
+            borderColor: '#6ee7b7',
+            backgroundColor: 'rgba(110, 231, 183, 0.12)',
             fill: true, tension: 0.3,
           },
           {
             label: 'Total Users',
             data: gdaily.map(d => d.users),
-            borderColor: '#38bdf8',
-            backgroundColor: 'rgba(56, 189, 248, 0.08)',
+            borderColor: '#7dd3fc',
+            backgroundColor: 'rgba(125, 211, 252, 0.08)',
             fill: true, tension: 0.3,
           },
         ],
@@ -854,7 +854,7 @@
         labels: gs.map(s => s.channel),
         datasets: [{
           data: gs.map(s => s.sessions),
-          backgroundColor: ['#00d4aa','#38bdf8','#818cf8','#ffa94d','#ff6b6b','#f472b6','#22d3ee','#a78bfa','#7a84a0','#00b894']
+          backgroundColor: ['#6ee7b7','#7dd3fc','#a5b4fc','#fdba74','#fca5a5','#f9a8d4','#67e8f9','#c4b5fd','#8b95b0','#86efac']
         }]
       },
       options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
@@ -868,7 +868,7 @@
         labels: gd.map(x => x.device),
         datasets: [{
           data: gd.map(x => x.sessions),
-          backgroundColor: ['#00d4aa','#38bdf8','#818cf8','#ff6b6b']
+          backgroundColor: ['#6ee7b7','#7dd3fc','#a5b4fc','#fca5a5']
         }]
       },
       options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
