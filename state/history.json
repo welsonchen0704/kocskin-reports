@@ -57692,11 +57692,11 @@
           "廣告投遞": "active",
           "成果": 132,
           "花費金額 (TWD)": 21754.0,
-          "曝光次數": 169487,
+          "曝光次數": 169488,
           "觸及人數": 119278,
           "廣告組合名稱": "氣墊粉餅組合",
           "購買 ROAS（廣告投資報酬率）": 5.975453,
-          "頻率": 1.420941,
+          "頻率": 1.420949,
           "購買次數": 132,
           "歸因設定": "點擊後 7 天",
           "_ad_id": "120236116795050630",
@@ -57947,11 +57947,11 @@
           "廣告投遞": "active",
           "成果": 40,
           "花費金額 (TWD)": 12585.0,
-          "曝光次數": 68890,
+          "曝光次數": 68893,
           "觸及人數": 35159,
           "廣告組合名稱": "紅麴_260312_轉換",
           "購買 ROAS（廣告投資報酬率）": 6.317203,
-          "頻率": 1.959385,
+          "頻率": 1.95947,
           "購買次數": 40,
           "歸因設定": "點擊後 7 天",
           "_ad_id": "120240401364120630",
@@ -58133,12 +58133,12 @@
           "廣告名稱": "app防曬d",
           "廣告投遞": "active",
           "成果": 38,
-          "花費金額 (TWD)": 15492.0,
-          "曝光次數": 81593,
-          "觸及人數": 36564,
+          "花費金額 (TWD)": 15493.0,
+          "曝光次數": 81595,
+          "觸及人數": 36647,
           "廣告組合名稱": "app防曬＆胺基酸潔顏乳組合",
-          "購買 ROAS（廣告投資報酬率）": 4.107475,
-          "頻率": 2.231512,
+          "購買 ROAS（廣告投資報酬率）": 4.10721,
+          "頻率": 2.226512,
           "購買次數": 38,
           "歸因設定": "點擊後 7 天",
           "_ad_id": "120241369949710630",
@@ -58185,11 +58185,11 @@
           "廣告投遞": "inactive",
           "成果": 12,
           "花費金額 (TWD)": 6454.0,
-          "曝光次數": 37607,
+          "曝光次數": 37609,
           "觸及人數": 23655,
           "廣告組合名稱": "毛孔洗面乳組合",
           "購買 ROAS（廣告投資報酬率）": 2.201271,
-          "頻率": 1.589812,
+          "頻率": 1.589896,
           "購買次數": 12,
           "歸因設定": "點擊後 7 天",
           "_ad_id": "120241371066270630",
@@ -58542,11 +58542,11 @@
           "廣告投遞": "active",
           "成果": 9,
           "花費金額 (TWD)": 3196.0,
-          "曝光次數": 13071,
+          "曝光次數": 13072,
           "觸及人數": 5561,
           "廣告組合名稱": "app防曬＆胺基酸潔顏乳組合",
           "購買 ROAS（廣告投資報酬率）": 3.349499,
-          "頻率": 2.350477,
+          "頻率": 2.350656,
           "購買次數": 9,
           "歸因設定": "點擊後 7 天",
           "_ad_id": "120241693273650630",
@@ -58728,12 +58728,12 @@
           "廣告名稱": "玫瑰安瓶_260409_轉換_image_yen_c - 複本",
           "廣告投遞": "inactive",
           "成果": 10,
-          "花費金額 (TWD)": 10904.0,
-          "曝光次數": 40358,
+          "花費金額 (TWD)": 10906.0,
+          "曝光次數": 40360,
           "觸及人數": 17122,
           "廣告組合名稱": "玫瑰安瓶_260409_轉換",
-          "購買 ROAS（廣告投資報酬率）": 2.337949,
-          "頻率": 2.357084,
+          "購買 ROAS（廣告投資報酬率）": 2.337521,
+          "頻率": 2.357201,
           "購買次數": 10,
           "歸因設定": "點擊後 7 天",
           "_ad_id": "120241981663040630",
@@ -58780,11 +58780,11 @@
           "廣告投遞": "inactive",
           "成果": null,
           "花費金額 (TWD)": 1210.0,
-          "曝光次數": 5263,
-          "觸及人數": 2806,
+          "曝光次數": 5265,
+          "觸及人數": 2811,
           "廣告組合名稱": "卸妝水買2送1_260416a",
           "購買 ROAS（廣告投資報酬率）": 0.0,
-          "頻率": 1.875624,
+          "頻率": 1.872999,
           "購買次數": 0,
           "歸因設定": "點擊後 7 天",
           "_ad_id": "120242048107480630",
@@ -85785,6 +85785,10 @@
     {
       "run_date": "2026-04-18",
       "at": "2026-04-18T04:34:03+00:00"
+    },
+    {
+      "run_date": "2026-04-18",
+      "at": "2026-04-18T06:02:18+00:00"
     }
   ],
   "ga_snapshots": [
@@ -86524,65 +86528,65 @@
           },
           {
             "date": "2026-04-16",
-            "sessions": 1502,
+            "sessions": 1491,
             "users": 2763,
             "new_users": 483,
             "pageviews": 12881
           },
           {
             "date": "2026-04-17",
-            "sessions": 1143,
-            "users": 2572,
-            "new_users": 423,
-            "pageviews": 9438
+            "sessions": 1155,
+            "users": 2573,
+            "new_users": 447,
+            "pageviews": 9936
           }
         ],
         "traffic_sources": [
           {
             "channel": "Paid Other",
-            "sessions": 5482,
-            "users": 3914,
-            "conversions": 16856
+            "sessions": 5525,
+            "users": 3937,
+            "conversions": 17063
           },
           {
             "channel": "Mobile Push Notifications",
-            "sessions": 5132,
+            "sessions": 5138,
             "users": 934,
-            "conversions": 8547
+            "conversions": 8551
           },
           {
             "channel": "Paid Social",
-            "sessions": 4767,
-            "users": 3036,
-            "conversions": 12884
+            "sessions": 4744,
+            "users": 3043,
+            "conversions": 12977
           },
           {
             "channel": "Direct",
-            "sessions": 4078,
-            "users": 2381,
-            "conversions": 8588
+            "sessions": 4094,
+            "users": 2387,
+            "conversions": 8655
           },
           {
             "channel": "Organic Social",
-            "sessions": 899,
-            "users": 583,
-            "conversions": 2095
-          },
-          {
-            "channel": "Unassigned",
-            "sessions": 814,
-            "users": 2547,
-            "conversions": 2431
+            "sessions": 900,
+            "users": 584,
+            "conversions": 2100
           },
           {
             "channel": "Organic Search",
-            "sessions": 757,
-            "users": 448,
-            "conversions": 1963
+            "sessions": 761,
+            "users": 451,
+            "conversions": 1976
+          },
+          {
+            "channel": "Unassigned",
+            "sessions": 755,
+            "users": 2502,
+            "conversions": 2223
           },
           {
             "channel": "SMS",
-            "sessions": 452,
+            "sessions": 453,
             "users": 267,
             "conversions": 1063
           },
@@ -86620,7 +86624,7 @@
         "devices": [
           {
             "device": "mobile",
-            "sessions": 21331,
+            "sessions": 21329,
             "users": 10997
           },
           {
@@ -86637,21 +86641,15 @@
         "landing_pages": [
           {
             "path": "(not set)",
-            "sessions": 12315,
-            "users": 4421,
-            "bounce_rate": 0.2197
+            "sessions": 12779,
+            "users": 4485,
+            "bounce_rate": 0.218
           },
           {
             "path": "/",
-            "sessions": 600,
-            "users": 439,
-            "bounce_rate": 0.2583
-          },
-          {
-            "path": "(not set)",
-            "sessions": 592,
-            "users": 2058,
-            "bounce_rate": 0.2889
+            "sessions": 603,
+            "users": 440,
+            "bounce_rate": 0.257
           },
           {
             "path": "/page/008",
@@ -86661,21 +86659,27 @@
           },
           {
             "path": "/v2/official",
-            "sessions": 261,
-            "users": 221,
-            "bounce_rate": 0.1916
+            "sessions": 263,
+            "users": 223,
+            "bounce_rate": 0.1901
           },
           {
-            "path": "/V2/ShoppingCart/Index?shopId=40757",
-            "sessions": 65,
-            "users": 62,
-            "bounce_rate": 0.1846
+            "path": "(not set)",
+            "sessions": 64,
+            "users": 312,
+            "bounce_rate": 0.2656
           },
           {
             "path": "/Errors/PageNotFoundContainer?errMsg=%E9%9A%B1%E8%B3%A3%E5%95%86%E5%93%81%E9%A0%81%E5%8F%83%E6%95%B8%E4%B8%8D%E6%AD%A3%E7%A2%BA",
             "sessions": 58,
             "users": 58,
             "bounce_rate": 0.0
+          },
+          {
+            "path": "/V2/ShoppingCart/Index?shopId=40757",
+            "sessions": 54,
+            "users": 51,
+            "bounce_rate": 0.0185
           },
           {
             "path": "/SalePage/Index/10165499",
@@ -86727,12 +86731,12 @@
           }
         ],
         "totals": {
-          "sessions": 22803,
-          "users": 11780,
-          "new_users": 6446,
-          "pageviews": 218509,
-          "conversions": 55220,
-          "purchase_revenue": 1885085.0001640003
+          "sessions": 22837,
+          "users": 11782,
+          "new_users": 6470,
+          "pageviews": 219007,
+          "conversions": 55401,
+          "purchase_revenue": 1885085.000164
         }
       }
     }
