@@ -382,3 +382,25 @@
 2026-04-19 02:11:41 | INFO | Encrypted HTML written to /home/runner/work/kocskin-reports/kocskin-reports/dist/index.html
 2026-04-19 02:11:41 | INFO | Run complete. orders=1701 ad_spend=219793 blended_roas=9.32 ga_sessions=23473
 2026-04-19 02:11:41 | INFO | Exit code: 0
+2026-04-20 02:11:02 | INFO | ============================================================
+2026-04-20 02:11:02 | INFO | Run started at 2026-04-20T02:11:02+00:00
+2026-04-20 02:11:03 | INFO | Drive folder id: 1oQpEvowEa2XJ7StfG2Je8T7yNuwaV98F
+2026-04-20 02:11:03 | INFO | Folder has 7 files
+2026-04-20 02:11:03 | INFO | Matched files:
+2026-04-20 02:11:03 | INFO |   sales_xlsx: 商店銷售統計表_20260420083555.xlsx (mtime=2026-04-20T00:35:55.063Z)
+2026-04-20 02:11:03 | INFO |   product_csv: 商品報表_utf8_bom.csv (mtime=2026-04-20T00:35:25.002Z)
+2026-04-20 02:11:03 | INFO | Downloading 商店銷售統計表_20260420083555.xlsx → /home/runner/work/kocskin-reports/kocskin-reports/downloads/商店銷售統計表_20260420083555.xlsx
+2026-04-20 02:11:04 | INFO | Downloading 商品報表_utf8_bom.csv → /home/runner/work/kocskin-reports/kocskin-reports/downloads/商品報表_utf8_bom.csv
+2026-04-20 02:11:05 | INFO | Parsed sales xlsx: 19 daily rows
+2026-04-20 02:11:05 | INFO | Sales period: 2026-04-01 ~ 2026-04-19 (19 days)
+2026-04-20 02:11:05 | INFO | Parsed product csv: 48 rows
+2026-04-20 02:11:06 | INFO | FB token: never expires (System User) ✓
+2026-04-20 02:11:13 | INFO | FB: fetched 1653 ads in account
+2026-04-20 02:11:18 | INFO | FB: fetched 71 insight rows for 2026-04-01 ~ 2026-04-19
+2026-04-20 02:11:18 | INFO | FB: normalized 1654 records (71 with spend, 1583 without)
+2026-04-20 02:11:18 | INFO | FB: 1654 ad records fetched
+2026-04-20 02:11:23 | INFO | GA: 19 daily rows, 13 sources, 3 devices, 15 landing pages | totals sessions=24877 users=12615 conversions=59674
+2026-04-20 02:11:23 | INFO | Running staticrypt encryption…
+2026-04-20 02:11:26 | INFO | Encrypted HTML written to /home/runner/work/kocskin-reports/kocskin-reports/dist/index.html
+2026-04-20 02:11:26 | INFO | Run complete. orders=1752 ad_spend=228405 blended_roas=9.16 ga_sessions=24877
+2026-04-20 02:11:26 | INFO | Exit code: 0
