@@ -1,17 +1,19 @@
-# KOCSKIN 銷售週報自動產生器 (v3)
+# KOCSKIN 銷售月報自動產生器 (v4)
 
 自動化腳本 + GitHub Actions 組合，功能：
 
 1. 定時從 Google Drive 的 `KOCSKIN_週報` 讀取 **2 個 91APP 報表**
    - 商店銷售統計表*.xlsx
    - 商品報表*.csv
-2. 自動從 **Facebook Marketing API** 拉廣告成效（不用再手動下載 CSV）
-3. 自動從 **GA4 Data API** 拉流量分析（新分頁）
+2. 自動從 **Facebook Marketing API** 拉廣告成效（**本月初到今天**）
+3. 自動從 **GA4 Data API** 拉流量分析（**本月初到今天**）
 4. 三個資料來源若有更新，重新產出 HTML 儀表板
 5. 解析時剔除所有「成本 / 毛利 / 利潤」相關欄位
 6. 用 **staticrypt** 做 AES-256 前端密碼加密
 7. Commit 回 repo 並透過 GitHub Pages 發布
 8. 每次執行在 `logs/` 留記錄
+9. **報表前端可切換月份**（預設本月，header 下拉選舊月份）
+10. **Drive 同 pattern 舊檔案自動歸檔到 `archive/YYYY-MM/`**（按檔案 mtime 月份）
 
 ---
 
@@ -51,7 +53,7 @@ Repo → Settings → Pages → Source: `GitHub Actions`
 3. 「IAM → 服務帳戶」→ 建立 → 名稱 `kocskin-report-reader`
 4. 進入服務帳戶 → 「金鑰」→ 新增金鑰 → JSON → 下載
 5. 複製服務帳戶 email（`xxx@xxx.iam.gserviceaccount.com`）
-6. 到 Google Drive 的 `KOCSKIN_週報` 資料夾 → 共用 → 把這個 email 加進去（檢視者）
+6. 到 Google Drive 的 `KOCSKIN_週報` 資料夾 → 共用 → 把這個 email 加進去（**編輯者** — v4 起需要寫權限做歸檔，舊版的「檢視者」會讓 archive 步驟 403）
 7. 到 GA4 → 管理 → 屬性存取管理 → 新增使用者 → 貼上這個 email → 角色「檢視者」即可
 
 ### 4. Facebook 存取權杖（Long-Lived User Token，60 天）
@@ -158,6 +160,8 @@ LOCAL_ONLY=1 REPORT_PASSWORD=yourpassword python3 generate_report.py
 
 ## 報表內容
 
+**期間切換**：報表預設顯示「本月（月初到今天）」，header 右上有「顯示月份」下拉，可切到任一個 history 內有資料的舊月份。所有 KPI、圖表、表格都會即時依該月重算（不重抓 API）。
+
 **銷售資料分頁**：訂單數、訂單金額（ECOM 實際營收）、取消金額、淨銷售、客單價、取消率、退貨率、商品數
 
 **廣告資料分頁**：廣告花費、Blended ROAS、Meta 歸因 ROAS、Meta 歸因購買、曝光、Active/Inactive 廣告 ROAS、Meta 歸因 / ECOM 實際比
@@ -165,6 +169,18 @@ LOCAL_ONLY=1 REPORT_PASSWORD=yourpassword python3 generate_report.py
 **GA 流量分頁**：Sessions / Users / PV、每日趨勢、流量來源、裝置分布、Top Landing Pages
 
 **絕不會出現**：成本、毛利、毛利率、利潤（腳本在解析階段就剔除）
+
+## Drive 歸檔規則（v4 新增）
+
+每次「成功產出報表」後，腳本會掃 `KOCSKIN_週報` 資料夾：
+
+- 對每個檔名 pattern（`商店銷售統計表*.xlsx`、`商品報表*.csv`），**只留下 mtime 最新的那份在原處**
+- 其他舊版搬到 `KOCSKIN_週報/archive/YYYY-MM/`，YYYY-MM 取**檔案 mtime 月份**（不是執行月份）
+- archive / YYYY-MM 子資料夾若不存在會自動建立
+- 搬檔失敗只 log 不擋報表發布
+
+→ 每月底舊檔自動歸檔，不用手動整理。
+→ 服務帳號必須是 Drive 該資料夾的「**編輯者**」（見部署步驟 3-6）。
 
 ## 檔案結構
 

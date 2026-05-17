@@ -74,7 +74,8 @@ SENSITIVE_SALES_COLS = {"成本", "毛利率", "毛利", "毛利金額"}
 # Columns we MUST strip from product csv (if present)
 SENSITIVE_PRODUCT_COLS = {"成本", "毛利", "毛利率", "毛利金額", "利潤"}
 
-SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
+# 需要寫權限做歸檔；Drive 上 KOCSKIN_週報 資料夾要把服務帳號設為「編輯者」
+SCOPES = ["https://www.googleapis.com/auth/drive"]
 
 # ---------------------------------------------------------------------------
 # Logging
@@ -191,6 +192,66 @@ def match_patterns(files: List[Dict]) -> Dict[str, Dict]:
         candidates.sort(key=lambda x: x["modifiedTime"], reverse=True)
         matched[key] = candidates[0]
     return matched
+
+
+def find_or_create_subfolder(drive, parent_id: str, name: str) -> str:
+    """找 parent 底下叫 name 的子資料夾；沒有就建一個，回傳 id。"""
+    safe_name = name.replace("'", "\\'")
+    q = (
+        f"'{parent_id}' in parents and "
+        f"name = '{safe_name}' and "
+        f"mimeType = 'application/vnd.google-apps.folder' and "
+        f"trashed = false"
+    )
+    res = drive.files().list(q=q, fields="files(id,name)", pageSize=5).execute()
+    files = res.get("files", [])
+    if files:
+        return files[0]["id"]
+    meta = {
+        "name": name,
+        "mimeType": "application/vnd.google-apps.folder",
+        "parents": [parent_id],
+    }
+    created = drive.files().create(body=meta, fields="id").execute()
+    logger.info("  Created folder: %s/%s", parent_id, name)
+    return created["id"]
+
+
+def archive_old_files(drive, folder_id: str, all_files: List[Dict]) -> int:
+    """
+    對每種 pattern，保留最新 mtime 的那份，其他舊版搬到 archive/YYYY-MM/。
+    歸屬月份用「檔案 mtime 的 YYYY-MM」（不是執行月份）。
+    失敗只 log，不中斷。回傳搬走的檔案數。
+    """
+    moved = 0
+    for key, pattern in PATTERNS.items():
+        candidates = [f for f in all_files if pattern.match(f["name"])]
+        if len(candidates) <= 1:
+            continue
+        candidates.sort(key=lambda x: x["modifiedTime"], reverse=True)
+        # candidates[0] 保留原處（下次當作對照基準），其餘 archive
+        for old in candidates[1:]:
+            try:
+                ym = (old.get("modifiedTime") or "")[:7]  # YYYY-MM
+                if not ym or len(ym) != 7:
+                    ym = "unknown"
+                archive_root = find_or_create_subfolder(drive, folder_id, "archive")
+                ym_folder = find_or_create_subfolder(drive, archive_root, ym)
+                drive.files().update(
+                    fileId=old["id"],
+                    addParents=ym_folder,
+                    removeParents=folder_id,
+                    fields="id, parents",
+                ).execute()
+                logger.info("  Archived %s → archive/%s/", old["name"], ym)
+                moved += 1
+            except Exception as e:
+                logger.error("  Failed to archive %s: %s", old.get("name"), e)
+    if moved:
+        logger.info("Archive: %d old file(s) moved", moved)
+    else:
+        logger.info("Archive: nothing to move (only newest of each pattern present)")
+    return moved
 
 
 # ---------------------------------------------------------------------------
@@ -311,18 +372,37 @@ def _num(v, default=0):
         return default
 
 
-def build_dashboard_payload(history: Dict[str, Any]) -> Dict[str, Any]:
-    sales = history.get("daily_sales", [])
-    products_latest = (history.get("product_snapshots") or [{}])[-1].get("items", [])
-    ads_latest = (history.get("ad_snapshots") or [{}])[-1].get("items", [])
-    ga_latest = None
-    ga_snaps = history.get("ga_snapshots") or []
-    if ga_snaps:
-        ga_latest = ga_snaps[-1].get("data")
+def _month_of(d: Any) -> str:
+    """從 YYYY-MM-DD 取 YYYY-MM；空值回空字串。"""
+    s = str(d or "")
+    return s[:7] if len(s) >= 7 else ""
 
-    # ----- Daily series -----
+
+def _last_snapshot_for_month(snaps: List[Dict], month: str) -> Optional[Dict]:
+    """找該月最後一個 snapshot（按 run_date 排序）。若該月無，fallback 取 ≤ 該月最近的一個。"""
+    in_month = [s for s in snaps if _month_of(s.get("run_date")) == month]
+    if in_month:
+        in_month.sort(key=lambda s: s.get("run_date", ""))
+        return in_month[-1]
+    before = [s for s in snaps if _month_of(s.get("run_date")) and _month_of(s.get("run_date")) < month]
+    if before:
+        before.sort(key=lambda s: s.get("run_date", ""))
+        return before[-1]
+    return None
+
+
+def _compute_month_view(
+    month: str,
+    month_sales: List[Dict],
+    ads_items: List[Dict],
+    products_items: List[Dict],
+    ga_data: Optional[Dict[str, Any]],
+) -> Dict[str, Any]:
+    """給定單月的銷售逐日列 + 該月對應的 ads/products/ga 快照，算出該月完整 view。"""
+
+    # ----- Daily series（該月）-----
     daily_series = []
-    for r in sales:
+    for r in month_sales:
         daily_series.append({
             "date": r.get("日期"),
             "orders": _num(r.get("訂單筆數(TS)")),
@@ -336,7 +416,7 @@ def build_dashboard_payload(history: Dict[str, Any]) -> Dict[str, Any]:
             "net_sales": _num(r.get("淨銷售額")),
         })
 
-    # ----- Sales KPIs -----
+    # ----- Sales totals -----
     total_orders = sum(d["orders"] for d in daily_series)
     total_gross = sum(d["gross_amount"] for d in daily_series)
     total_discount = sum(d["discount"] for d in daily_series)
@@ -350,13 +430,13 @@ def build_dashboard_payload(history: Dict[str, Any]) -> Dict[str, Any]:
     avg_order_value = (total_gross / total_orders) if total_orders else 0
 
     sales_dates = sorted([d["date"] for d in daily_series if d["date"]])
-    period_start = sales_dates[0] if sales_dates else "-"
-    period_end = sales_dates[-1] if sales_dates else "-"
+    period_start = sales_dates[0] if sales_dates else f"{month}-01"
+    period_end = sales_dates[-1] if sales_dates else f"{month}-01"
     period_days = len(sales_dates) if sales_dates else 1
 
     # ----- Top products -----
     top_products = []
-    for p in products_latest:
+    for p in products_items:
         name_raw = p.get("商品頁名稱")
         sid = p.get("商品頁序號")
         if name_raw is None or str(name_raw).strip().lower() in ("", "nan", "none", "null"):
@@ -377,7 +457,7 @@ def build_dashboard_payload(history: Dict[str, Any]) -> Dict[str, Any]:
 
     # ----- Ads aggregate by 廣告組合名稱 -----
     ad_groups: Dict[str, Dict[str, float]] = {}
-    for a in ads_latest:
+    for a in ads_items:
         g = str(a.get("廣告組合名稱") or "未分組")
         d = ad_groups.setdefault(g, {
             "spend": 0.0, "impressions": 0.0, "reach": 0.0,
@@ -413,9 +493,9 @@ def build_dashboard_payload(history: Dict[str, Any]) -> Dict[str, Any]:
 
     # ----- Top 10 individual ads by ROAS -----
     top_ads_by_roas = []
-    for a in ads_latest:
+    for a in ads_items:
         spend = _num(a.get("花費金額 (TWD)"))
-        if spend < 100:  # 花費太低的排除，避免噪音
+        if spend < 100:
             continue
         roas = _num(a.get("購買 ROAS（廣告投資報酬率）"))
         top_ads_by_roas.append({
@@ -432,7 +512,7 @@ def build_dashboard_payload(history: Dict[str, Any]) -> Dict[str, Any]:
 
     # ----- Top 10 individual ads by Spend -----
     top_ads_by_spend = []
-    for a in ads_latest:
+    for a in ads_items:
         spend = _num(a.get("花費金額 (TWD)"))
         if spend <= 0:
             continue
@@ -450,13 +530,13 @@ def build_dashboard_payload(history: Dict[str, Any]) -> Dict[str, Any]:
     top_ads_by_spend = top_ads_by_spend[:10]
 
     # ----- Ad totals -----
-    total_spend = sum(_num(a.get("花費金額 (TWD)")) for a in ads_latest)
-    total_purchases = sum(_num(a.get("購買次數")) for a in ads_latest)
-    total_impressions = sum(_num(a.get("曝光次數")) for a in ads_latest)
-    total_reach = sum(_num(a.get("觸及人數")) for a in ads_latest)
+    total_spend = sum(_num(a.get("花費金額 (TWD)")) for a in ads_items)
+    total_purchases = sum(_num(a.get("購買次數")) for a in ads_items)
+    total_impressions = sum(_num(a.get("曝光次數")) for a in ads_items)
+    total_reach = sum(_num(a.get("觸及人數")) for a in ads_items)
 
     roas_weighted_sum = 0.0
-    for a in ads_latest:
+    for a in ads_items:
         spend = _num(a.get("花費金額 (TWD)"))
         roas = _num(a.get("購買 ROAS（廣告投資報酬率）"))
         roas_weighted_sum += spend * roas
@@ -470,7 +550,7 @@ def build_dashboard_payload(history: Dict[str, Any]) -> Dict[str, Any]:
     overall_cpm = (total_spend / total_impressions * 1000) if total_impressions else 0
 
     def _bucket(status_key: str):
-        items = [a for a in ads_latest
+        items = [a for a in ads_items
                  if str(a.get("廣告投遞") or "").strip().lower() == status_key]
         count = len(items)
         spend = sum(_num(a.get("花費金額 (TWD)")) for a in items)
@@ -489,19 +569,37 @@ def build_dashboard_payload(history: Dict[str, Any]) -> Dict[str, Any]:
     active_bucket = _bucket("active")
     inactive_bucket = _bucket("inactive")
 
-    # ----- GA block -----
+    # ----- GA block（過濾該月）-----
     ga_block = None
-    if ga_latest:
+    if ga_data:
+        ga_daily = [d for d in (ga_data.get("daily") or [])
+                    if _month_of(d.get("date")) == month]
+        # 若該月無 GA 逐日資料（可能 snapshot 是上月最後一次的 fallback），就保留原樣
+        if not ga_daily:
+            ga_daily = ga_data.get("daily", [])
+        # totals 重算（依該月）
+        if ga_daily:
+            ga_totals = {
+                "sessions": sum(int(d.get("sessions", 0) or 0) for d in ga_daily),
+                "users": sum(int(d.get("users", 0) or 0) for d in ga_daily),
+                "new_users": sum(int(d.get("new_users", 0) or 0) for d in ga_daily),
+                "pageviews": sum(int(d.get("pageviews", 0) or 0) for d in ga_daily),
+                # conversions / revenue 是該月整段，從 snapshot 的 totals 帶入
+                "conversions": int((ga_data.get("totals") or {}).get("conversions", 0) or 0),
+                "purchase_revenue": float((ga_data.get("totals") or {}).get("purchase_revenue", 0) or 0),
+            }
+        else:
+            ga_totals = ga_data.get("totals", {})
         ga_block = {
-            "daily": ga_latest.get("daily", []),
-            "traffic_sources": ga_latest.get("traffic_sources", []),
-            "devices": ga_latest.get("devices", []),
-            "landing_pages": ga_latest.get("landing_pages", []),
-            "totals": ga_latest.get("totals", {}),
+            "daily": ga_daily,
+            "traffic_sources": ga_data.get("traffic_sources", []),
+            "devices": ga_data.get("devices", []),
+            "landing_pages": ga_data.get("landing_pages", []),
+            "totals": ga_totals,
         }
 
     return {
-        "generated_at": _nowiso(),
+        "month": month,
         "period_start": period_start,
         "period_end": period_end,
         "period_days": period_days,
@@ -541,6 +639,43 @@ def build_dashboard_payload(history: Dict[str, Any]) -> Dict[str, Any]:
         "top_ads_by_roas": top_ads_by_roas,
         "top_ads_by_spend": top_ads_by_spend,
         "ga": ga_block,
+    }
+
+
+def build_dashboard_payload(history: Dict[str, Any]) -> Dict[str, Any]:
+    """月報模式：按月分組產出多月資料，前端可切換。"""
+    daily_all = history.get("daily_sales", [])
+    product_snaps = history.get("product_snapshots", []) or []
+    ad_snaps = history.get("ad_snapshots", []) or []
+    ga_snaps = history.get("ga_snapshots", []) or []
+
+    # 從 daily_sales 抓所有有資料的月份
+    months_set = {_month_of(r.get("日期")) for r in daily_all if r.get("日期")}
+    months_set.discard("")
+    # 確保本月一定在清單裡（即使月初還沒有資料）
+    current_month = datetime.now().strftime("%Y-%m")
+    months_set.add(current_month)
+    available_months = sorted(months_set)
+
+    monthly_data: Dict[str, Dict[str, Any]] = {}
+    for m in available_months:
+        month_sales = [r for r in daily_all if _month_of(r.get("日期")) == m]
+        last_prod = _last_snapshot_for_month(product_snaps, m)
+        last_ad = _last_snapshot_for_month(ad_snaps, m)
+        last_ga = _last_snapshot_for_month(ga_snaps, m)
+        monthly_data[m] = _compute_month_view(
+            month=m,
+            month_sales=month_sales,
+            ads_items=(last_ad or {}).get("items", []),
+            products_items=(last_prod or {}).get("items", []),
+            ga_data=(last_ga or {}).get("data"),
+        )
+
+    return {
+        "generated_at": _nowiso(),
+        "current_month": current_month,
+        "available_months": available_months,
+        "monthly_data": monthly_data,
         "runs_count": len(history.get("runs", [])),
     }
 
@@ -622,6 +757,9 @@ def run(
     sa_info = json.loads(sa_raw)
 
     # ---- 2. File detection ----
+    drive = None
+    folder_id: Optional[str] = None
+    drive_files: List[Dict] = []
     if local_only:
         logger.info("LOCAL mode — reading from %s", DOWNLOAD_DIR)
         local_files = list(DOWNLOAD_DIR.iterdir())
@@ -637,14 +775,13 @@ def run(
                     "modifiedTime": datetime.fromtimestamp(p.stat().st_mtime, tz=timezone.utc).isoformat(),
                     "_local_path": p,
                 }
-        drive = None
     else:
         drive = build_drive_client(sa_info)
         folder_id = find_drive_folder_id(drive, drive_folder_name)
         logger.info("Drive folder id: %s", folder_id)
-        files = list_drive_files(drive, folder_id)
-        logger.info("Folder has %d files", len(files))
-        matched = match_patterns(files)
+        drive_files = list_drive_files(drive, folder_id)
+        logger.info("Folder has %d files", len(drive_files))
+        matched = match_patterns(drive_files)
 
     missing = [k for k in PATTERNS if k not in matched]
     if missing:
@@ -678,14 +815,20 @@ def run(
             download_drive_file(drive, meta["id"], dest)
             local_paths[key] = dest
 
-    # ---- 4. Parse sales xlsx → get date range ----
+    # ---- 4. Parse sales xlsx ----
     sales = parse_sales_xlsx(local_paths["sales_xlsx"])
     sales_dates = sorted([r.get("日期") for r in sales if r.get("日期")])
     if not sales_dates:
         logger.error("Sales xlsx has no valid dates — cannot query APIs")
         return 1
-    since, until = sales_dates[0], sales_dates[-1]
-    logger.info("Sales period: %s ~ %s (%d days)", since, until, len(sales_dates))
+
+    # 月報模式：FB/GA 抓取期間固定為「本月初 ~ 今天」（不再吃 xlsx 範圍）
+    now = datetime.now()
+    since = now.replace(day=1).strftime("%Y-%m-%d")
+    until = now.strftime("%Y-%m-%d")
+    logger.info("Report period (this month): %s ~ %s", since, until)
+    logger.info("Sales xlsx covers %d days (%s ~ %s) — merged into history",
+                len(sales_dates), sales_dates[0], sales_dates[-1])
 
     products = parse_product_csv(local_paths["product_csv"])
 
@@ -744,12 +887,23 @@ def run(
     last_run["last_success"] = _nowiso()
     _save_json(LAST_RUN_FILE, last_run)
 
+    # ---- 10. Archive old files on Drive (best-effort) ----
+    if drive is not None and folder_id and drive_files:
+        try:
+            archive_old_files(drive, folder_id, drive_files)
+        except Exception as e:
+            logger.error("Archive step failed (non-fatal): %s", e)
+
+    # ----- 完成日誌（取本月 view 的數字）-----
+    cm = payload.get("current_month")
+    cm_view = (payload.get("monthly_data") or {}).get(cm) or {}
     logger.info(
-        "Run complete. orders=%s ad_spend=%s blended_roas=%s ga_sessions=%s",
-        payload["kpis_sales"]["total_orders"],
-        payload["kpis_ad"]["total_spend"],
-        payload["kpis_ad"]["blended_roas"],
-        (payload.get("ga") or {}).get("totals", {}).get("sessions", "-"),
+        "Run complete. month=%s orders=%s ad_spend=%s blended_roas=%s ga_sessions=%s",
+        cm,
+        cm_view.get("kpis_sales", {}).get("total_orders"),
+        cm_view.get("kpis_ad", {}).get("total_spend"),
+        cm_view.get("kpis_ad", {}).get("blended_roas"),
+        (cm_view.get("ga") or {}).get("totals", {}).get("sessions", "-"),
     )
     return 0
 
