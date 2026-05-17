@@ -115,3 +115,27 @@
 2026-05-17 12:29:20 | INFO | Archive: 24 old file(s) moved
 2026-05-17 12:29:20 | INFO | Run complete. month=2026-05 orders=1318 ad_spend=152349 blended_roas=11.71 ga_sessions=19418
 2026-05-17 12:29:20 | INFO | Exit code: 0
+2026-05-17 12:38:19 | INFO | ============================================================
+2026-05-17 12:38:19 | INFO | Run started at 2026-05-17T12:38:19+00:00
+2026-05-17 12:38:20 | INFO | Drive folder id: 1oQpEvowEa2XJ7StfG2Je8T7yNuwaV98F
+2026-05-17 12:38:20 | INFO | Folder has 5 files
+2026-05-17 12:38:20 | INFO | Matched files:
+2026-05-17 12:38:20 | INFO |   sales_xlsx: 商店銷售統計表_20260517084706.xlsx (mtime=2026-05-17T00:47:06.399Z)
+2026-05-17 12:38:20 | INFO |   product_csv: 商品報表_utf8_bom.csv (mtime=2026-05-17T00:46:38.159Z)
+2026-05-17 12:38:20 | INFO | Downloading 商店銷售統計表_20260517084706.xlsx → /home/runner/work/kocskin-reports/kocskin-reports/downloads/商店銷售統計表_20260517084706.xlsx
+2026-05-17 12:38:20 | INFO | Downloading 商品報表_utf8_bom.csv → /home/runner/work/kocskin-reports/kocskin-reports/downloads/商品報表_utf8_bom.csv
+2026-05-17 12:38:21 | INFO | Parsed sales xlsx: 16 daily rows
+2026-05-17 12:38:21 | INFO | Report period (this month): 2026-05-01 ~ 2026-05-17
+2026-05-17 12:38:21 | INFO | Sales xlsx covers 16 days (2026-05-01 ~ 2026-05-16) — merged into history
+2026-05-17 12:38:21 | INFO | Parsed product csv: 57 rows
+2026-05-17 12:38:21 | INFO | FB token: never expires (System User) ✓
+2026-05-17 12:38:26 | INFO | FB: fetched 1438 ads in account
+2026-05-17 12:38:30 | INFO | FB: fetched 47 insight rows for 2026-05-01 ~ 2026-05-17
+2026-05-17 12:38:30 | INFO | FB: normalized 1438 records (47 with spend, 1391 without)
+2026-05-17 12:38:30 | INFO | FB: 1438 ad records fetched
+2026-05-17 12:38:34 | INFO | GA: 17 daily rows, 13 sources, 3 devices, 15 landing pages | totals sessions=18933 users=9611 conversions=45226
+2026-05-17 12:38:34 | INFO | Running staticrypt encryption…
+2026-05-17 12:38:37 | INFO | Encrypted HTML written to /home/runner/work/kocskin-reports/kocskin-reports/dist/index.html
+2026-05-17 12:38:37 | INFO | Archive: nothing to move (only newest of each pattern present)
+2026-05-17 12:38:37 | INFO | Run complete. month=2026-05 orders=1318 ad_spend=152378 blended_roas=11.71 ga_sessions=19421
+2026-05-17 12:38:37 | INFO | Exit code: 0
