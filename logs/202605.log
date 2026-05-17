@@ -64,3 +64,54 @@
 2026-05-17 02:11:31 | INFO | Encrypted HTML written to /home/runner/work/kocskin-reports/kocskin-reports/dist/index.html
 2026-05-17 02:11:31 | INFO | Run complete. orders=3576 ad_spend=150197 blended_roas=30.78 ga_sessions=18498
 2026-05-17 02:11:31 | INFO | Exit code: 0
+2026-05-17 12:28:24 | INFO | ============================================================
+2026-05-17 12:28:24 | INFO | Run started at 2026-05-17T12:28:24+00:00
+2026-05-17 12:28:24 | INFO | Drive folder id: 1oQpEvowEa2XJ7StfG2Je8T7yNuwaV98F
+2026-05-17 12:28:25 | INFO | Folder has 28 files
+2026-05-17 12:28:25 | INFO | Matched files:
+2026-05-17 12:28:25 | INFO |   sales_xlsx: 商店銷售統計表_20260517084706.xlsx (mtime=2026-05-17T00:47:06.399Z)
+2026-05-17 12:28:25 | INFO |   product_csv: 商品報表_utf8_bom.csv (mtime=2026-05-17T00:46:38.159Z)
+2026-05-17 12:28:25 | INFO | Downloading 商店銷售統計表_20260517084706.xlsx → /home/runner/work/kocskin-reports/kocskin-reports/downloads/商店銷售統計表_20260517084706.xlsx
+2026-05-17 12:28:25 | INFO | Downloading 商品報表_utf8_bom.csv → /home/runner/work/kocskin-reports/kocskin-reports/downloads/商品報表_utf8_bom.csv
+2026-05-17 12:28:26 | INFO | Parsed sales xlsx: 16 daily rows
+2026-05-17 12:28:26 | INFO | Report period (this month): 2026-05-01 ~ 2026-05-17
+2026-05-17 12:28:26 | INFO | Sales xlsx covers 16 days (2026-05-01 ~ 2026-05-16) — merged into history
+2026-05-17 12:28:26 | INFO | Parsed product csv: 57 rows
+2026-05-17 12:28:26 | INFO | FB token: never expires (System User) ✓
+2026-05-17 12:28:32 | INFO | FB: fetched 1438 ads in account
+2026-05-17 12:28:36 | INFO | FB: fetched 47 insight rows for 2026-05-01 ~ 2026-05-17
+2026-05-17 12:28:36 | INFO | FB: normalized 1438 records (47 with spend, 1391 without)
+2026-05-17 12:28:36 | INFO | FB: 1438 ad records fetched
+2026-05-17 12:28:41 | INFO | GA: 17 daily rows, 13 sources, 3 devices, 15 landing pages | totals sessions=18933 users=9606 conversions=45218
+2026-05-17 12:28:41 | INFO | Running staticrypt encryption…
+2026-05-17 12:28:42 | INFO | Encrypted HTML written to /home/runner/work/kocskin-reports/kocskin-reports/dist/index.html
+2026-05-17 12:28:44 | INFO |   Created folder: 1oQpEvowEa2XJ7StfG2Je8T7yNuwaV98F/archive
+2026-05-17 12:28:45 | INFO |   Created folder: 1PBSXkbKvcjMM2mUFtmWfRfwZwOrhS3_I/2026-05
+2026-05-17 12:28:46 | INFO |   Archived 商店銷售統計表_20260512064622.xlsx → archive/2026-05/
+2026-05-17 12:28:47 | INFO |   Archived 商店銷售統計表_20260511182439.xlsx → archive/2026-05/
+2026-05-17 12:28:49 | INFO |   Archived 商店銷售統計表_20260510211247.xlsx → archive/2026-05/
+2026-05-17 12:28:50 | INFO |   Archived 商店銷售統計表_20260507090044.xlsx → archive/2026-05/
+2026-05-17 12:28:51 | INFO |   Created folder: 1PBSXkbKvcjMM2mUFtmWfRfwZwOrhS3_I/2026-04
+2026-05-17 12:28:52 | INFO |   Archived 商店銷售統計表_20260430060041.xlsx → archive/2026-04/
+2026-05-17 12:28:54 | INFO |   Archived 商店銷售統計表_20260429080636.xlsx → archive/2026-04/
+2026-05-17 12:28:55 | INFO |   Archived 商店銷售統計表_20260428075629.xlsx → archive/2026-04/
+2026-05-17 12:28:57 | INFO |   Archived 商店銷售統計表_20260427075912.xlsx → archive/2026-04/
+2026-05-17 12:28:58 | INFO |   Archived 商店銷售統計表_20260426095913.xlsx → archive/2026-04/
+2026-05-17 12:29:00 | INFO |   Archived 商店銷售統計表_20260425084426.xlsx → archive/2026-04/
+2026-05-17 12:29:01 | INFO |   Archived 商店銷售統計表_20260424081936.xlsx → archive/2026-04/
+2026-05-17 12:29:03 | INFO |   Archived 商店銷售統計表_20260423072821.xlsx → archive/2026-04/
+2026-05-17 12:29:04 | INFO |   Archived 商店銷售統計表_20260422080633.xlsx → archive/2026-04/
+2026-05-17 12:29:06 | INFO |   Archived 商店銷售統計表_20260421064650.xlsx → archive/2026-04/
+2026-05-17 12:29:07 | INFO |   Archived 商店銷售統計表_20260420083555.xlsx → archive/2026-04/
+2026-05-17 12:29:09 | INFO |   Archived 商店銷售統計表_20260419081012.xlsx → archive/2026-04/
+2026-05-17 12:29:10 | INFO |   Archived 商店銷售統計表_20260418085621.xlsx → archive/2026-04/
+2026-05-17 12:29:11 | INFO |   Archived 商店銷售統計表_20260418052537.xlsx → archive/2026-04/
+2026-05-17 12:29:13 | INFO |   Archived 商品報表_utf8_bom (6).csv → archive/2026-05/
+2026-05-17 12:29:14 | INFO |   Archived 商品報表_utf8_bom (5).csv → archive/2026-05/
+2026-05-17 12:29:16 | INFO |   Archived 商品報表_utf8_bom (4).csv → archive/2026-05/
+2026-05-17 12:29:17 | INFO |   Archived 商品報表_utf8_bom (3).csv → archive/2026-04/
+2026-05-17 12:29:18 | INFO |   Archived 商品報表_utf8_bom (2).csv → archive/2026-04/
+2026-05-17 12:29:20 | INFO |   Archived 商品報表_utf8_bom (1).csv → archive/2026-04/
+2026-05-17 12:29:20 | INFO | Archive: 24 old file(s) moved
+2026-05-17 12:29:20 | INFO | Run complete. month=2026-05 orders=1318 ad_spend=152349 blended_roas=11.71 ga_sessions=19418
+2026-05-17 12:29:20 | INFO | Exit code: 0
