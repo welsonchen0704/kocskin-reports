@@ -8,17 +8,17 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
   :root {
-    --bg: #0f1623;
-    --panel: #171f30;
-    --panel-2: #1e2840;
-    --text: #edf0f7;
-    --muted: #8b95b0;
-    --accent: #6ee7b7;
-    --accent-2: #7dd3fc;
-    --ok: #6ee7b7;
-    --warn: #fca5a5;
-    --border: #263354;
-    --glow: rgba(110, 231, 183, 0.06);
+    --bg: #f8fafc;
+    --panel: #ffffff;
+    --panel-2: #f1f5f9;
+    --text: #0f172a;
+    --muted: #64748b;
+    --accent: #10b981;
+    --accent-2: #3b82f6;
+    --ok: #059669;
+    --warn: #dc2626;
+    --border: #e2e8f0;
+    --glow: rgba(15, 23, 42, 0.05);
   }
   * { box-sizing: border-box; }
   body {
@@ -30,7 +30,7 @@
   }
   header {
     padding: 28px 32px;
-    background: linear-gradient(135deg, #171f30 0%, #0f1623 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
     border-bottom: 1px solid var(--border);
     display: flex;
     justify-content: space-between;
@@ -38,7 +38,7 @@
     flex-wrap: wrap;
     gap: 12px;
   }
-  h1 { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: 0.5px; color: #fff; }
+  h1 { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: 0.5px; color: var(--text); }
   .period { color: var(--muted); font-size: 13px; }
   main { padding: 28px 32px 64px; max-width: 1400px; margin: 0 auto; }
 
@@ -57,11 +57,11 @@
     transition: box-shadow 0.2s, border-color 0.2s;
   }
   .kpi:hover {
-    border-color: rgba(110, 231, 183, 0.25);
-    box-shadow: 0 4px 20px rgba(110, 231, 183, 0.1);
+    border-color: rgba(16, 185, 129, 0.4);
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.12);
   }
   .kpi-label { color: var(--muted); font-size: 12px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .kpi-value { font-size: 28px; font-weight: 700; color: #fff; }
+  .kpi-value { font-size: 28px; font-weight: 700; color: var(--text); }
   .kpi-sub { color: var(--muted); font-size: 11px; margin-top: 6px; }
 
   section {
@@ -105,12 +105,12 @@
     padding: 3px 10px;
     font-size: 11px;
     border-radius: 10px;
-    background: rgba(110, 231, 183, 0.1);
-    color: var(--accent);
-    font-weight: 500;
+    background: rgba(16, 185, 129, 0.12);
+    color: #047857;
+    font-weight: 600;
   }
-  .pill.warn { background: rgba(252, 165, 165, 0.1); color: var(--warn); }
-  .pill.ok { background: rgba(110, 231, 183, 0.1); color: var(--ok); }
+  .pill.warn { background: rgba(220, 38, 38, 0.12); color: #b91c1c; }
+  .pill.ok { background: rgba(16, 185, 129, 0.12); color: #047857; }
 
   .tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
   .tab {
@@ -124,8 +124,8 @@
     border-radius: 8px;
     transition: all 0.2s;
   }
-  .tab:hover { color: var(--text); border-color: rgba(110, 231, 183, 0.3); background: var(--panel-2); }
-  .tab.active { color: var(--accent); border-color: var(--accent); background: rgba(110, 231, 183, 0.08); box-shadow: 0 0 12px rgba(110, 231, 183, 0.12); }
+  .tab:hover { color: var(--text); border-color: rgba(16, 185, 129, 0.4); background: var(--panel-2); }
+  .tab.active { color: var(--accent); border-color: var(--accent); background: rgba(16, 185, 129, 0.08); box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15); }
   .tab-panel { display: none; }
   .tab-panel.active { display: block; }
 
@@ -531,8 +531,8 @@
   const money = n => '$' + fmt(Math.round(n || 0));
   const pct = n => (n || 0).toFixed(2) + '%';
 
-  Chart.defaults.color = '#8b95b0';
-  Chart.defaults.borderColor = '#263354';
+  Chart.defaults.color = '#64748b';
+  Chart.defaults.borderColor = '#e2e8f0';
   Chart.defaults.font.family = '-apple-system, PingFang TC, Microsoft JhengHei, sans-serif';
   window._charts = {};
 
